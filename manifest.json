@@ -1,0 +1,24 @@
+{
+"name": "BroDers Keuangan",
+"short_name": "BroDers App",
+"description": "Sistem Manajemen Keuangan BroDers Barbershop",
+"start_url": "index.html",
+"display": "standalone",
+"background_color": "#0f172a",
+"theme_color": "#9B1C31",
+"orientation": "portrait",
+"icons": [
+{
+"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzlCMUMzMSIvPjxwYXRoIGQ9Ik0xOTIuNTgsODAuMTRsLTM2LjIzLDI1LjM3YTMxLjc3LDMxLjc3LDAsMSwwLDE4LjE1LDI1LjkyTDIwNi43NiwxMDlBOCw4LDAsMCwwLDE5Mi41OCw4MC4xNFpNMTE0LDEyOWEyLDIsMCwxLDAtMi0yQTIuMDYsMi4wNiwwLDAsMCwxMTQsMTI5Wm0yNCw0OWEyLDIsMCwxLDAsMiwyQTIuMDYsMi4wNiwwLDAsMCwxMzgsMTc4Wm0tNDYuOTEtNy42MmEyMCwyMCwwLDEsMSwxNS41Ni0xNS41NkEyMCwyMCwwLDAsMSw5MS4wOSwxNzAuMzhabTExMC43OCwyMS4yYTE2LDE2LDAsMSwxLDIyLjYzLDIyLjYyQTE2LDE2LDAsMCwxLDIwMS44NywxOTEuNThabS02MS4yNS01MS44N2ExNiwxNiwwLDEsMSwyMi42MiwyMi42M0ExNiwxNiwwLDAsMSwxNDAuNjIsMTM5LjcxbS04Ni4yNiwwYTE2LDE2LDAsMSwxLDIyLjYzLDIyLjYyQTE2LDE2LDAsMCwxLDU0LjM2LDEzOS43MVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=",
+"sizes": "192x192",
+"type": "image/svg+xml",
+"purpose": "any maskable"
+},
+{
+"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzlCMUMzMSIvPjxwYXRoIGQ9Ik0xOTIuNTgsODAuMTRsLTM2LjIzLDI1LjM3YTMxLjc3LDMxLjc3LDAsMSwwLDE4LjE1LDI1LjkyTDIwNi43NiwxMDlBOCw4LDAsMCwwLDE5Mi41OCw4MC4xNFpNMTE0LDEyOWEyLDIsMCwxLDAtMi0yQTIuMDYsMi4wNiwwLDAsMCwxMTQsMTI5Wm0yNCw0OWEyLDIsMCwxLDAsMiwyQTIuMDYsMi4wNiwwLDAsMCwxMzgsMTc4Wm0tNDYuOTEtNy42MmEyMCwyMCwwLDEsMSwxNS41Ni0xNS41NkEyMCwyMCwwLDAsMSw5MS4wOSwxNzAuMzhabTExMC43OCwyMS4yYTE2LDE2LDAsMSwxLDIyLjYzLDIyLjYyQTE2LDE2LDAsMCwxLDIwMS44NywxOTEuNThabS02MS4yNS01MS44N2ExNiwxNiwwLDEsMSwyMi42MiwyMi42M0ExNiwxNiwwLDAsMSwxNDAuNjIsMTM5LjcxbS04Ni4yNiwwYTE2LDE2LDAsMSwxLDIyLjYzLDIyLjYyQTE2LDE2LDAsMCwxLDU0LjM2LDEzOS43MVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=",
+"sizes": "512x512",
+"type": "image/svg+xml",
+"purpose": "any maskable"
+}
+]
+}
