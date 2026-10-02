@@ -3,33 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BroDers Keuangan</title>
-    
-    <!-- PWA Requirements -->
+    <title>BroDers Keuangan Barbershop</title>
     <meta name="theme-color" content="#9B1C31">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
     
-    <!-- Tailwind & Fonts -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins & Outfit for modern typography -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- html2pdf.js for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { poppins: ['Poppins', 'sans-serif'], outfit: ['Outfit', 'sans-serif'] },
-                    colors: { barber: { maroon: '#9B1C31', dark: '#6A0C1C', light: '#C2183D' } },
+                    fontFamily: { 
+                        poppins: ['Poppins', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    },
+                    colors: {
+                        barber: {
+                            maroon: '#9B1C31',
+                            dark: '#6A0C1C',
+                            light: '#C2183D',
+                            gold: '#D4AF37',
+                            surface: '#f8fafc'
+                        }
+                    },
                     animation: {
                         'fade-in': 'fadeIn 0.4s ease-out forwards',
                         'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 1.5s linear infinite',
                     },
                     keyframes: {
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
                     }
                 }
             }
@@ -37,430 +60,947 @@
     </script>
     
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0f172a; margin: 0; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 420px; height: 100vh; background: #f8fafc; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.6); }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a; 
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            background: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(353,49%,43%,0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(353,49%,43%,0.1) 0px, transparent 50%);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
         .font-outfit { font-family: 'Outfit', sans-serif; }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .shine-maroon { background: linear-gradient(135deg, #C2183D, #9B1C31, #6A0C1C); color: white; box-shadow: 0 10px 25px -5px rgba(155, 28, 49, 0.4); }
-        .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, 0.6); }
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); }
-        .modern-input { width: 100%; background: transparent; border: none; outline: none; font-size: 2.5rem; font-weight: 700; color: #0f172a; text-align: center; font-family: 'Outfit', sans-serif; }
-        .category-radio:checked + label { background: linear-gradient(135deg, #C2183D, #9B1C31); color: white; border-color: transparent; box-shadow: 0 8px 20px rgba(155, 28, 49, 0.3); transform: translateY(-2px); }
+
+        .shine-maroon {
+            background: linear-gradient(135deg, #C2183D, #9B1C31, #6A0C1C);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(155, 28, 49, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-maroon::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg); animation: shine-animation 3s infinite;
+        }
+        @keyframes shine-animation { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        .modern-input {
+            width: 100%; background: transparent; border: none; outline: none;
+            font-size: 2.5rem; font-weight: 700; color: #0f172a; text-align: center;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .modern-input::placeholder { color: #cbd5e1; }
+
+        /* Modern Radio Buttons */
+        .category-radio:checked + label {
+            background: linear-gradient(135deg, #C2183D, #9B1C31);
+            color: white; border-color: transparent;
+            box-shadow: 0 8px 20px rgba(155, 28, 49, 0.3);
+            transform: translateY(-2px);
+        }
         .category-radio:checked + label i { color: white; }
-        .category-radio-exp:checked + label { background: #1e293b; color: white; border-color: transparent; box-shadow: 0 8px 20px rgba(30, 41, 59, 0.3); transform: translateY(-2px); }
-        .category-radio-exp:checked + label i { color: white; }
-        .toast { transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         
+        .category-radio-exp:checked + label {
+            background: #1e293b; color: white; border-color: transparent;
+            box-shadow: 0 8px 20px rgba(30, 41, 59, 0.3);
+            transform: translateY(-2px);
+        }
+        .category-radio-exp:checked + label i { color: white; }
+
+        .toast { transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+        .receipt-edge {
+            background-image: radial-gradient(circle at 10px 0, transparent 10px, #ffffff 11px);
+            background-size: 20px 20px;
+            background-position: -10px 0;
+            background-repeat: repeat-x;
+            height: 20px;
+            width: 100%;
+        }
+
+        .view-section:not(.hidden) {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
         /* Loader */
-        .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; }
+        .loader {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- TAMPILAN LOGIN -->
-    <div id="login-view" class="app-container z-50 flex flex-col justify-center items-center px-8 bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZGVmcz48cGF0dGVybiBpZD0icCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48Y2lyY2xlIGN4PSIyIiBjeT0iMiIgcj0iMiIgZmlsbD0iI2YxZjViOSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwKSIvPjwvc3ZnPg==')]">
+    <div id="app">
         
-        <div class="w-24 h-24 rounded-full shine-maroon flex items-center justify-center text-5xl mb-6 shadow-2xl ring-8 ring-white animate-slide-up">
-            <i class="ph-bold ph-scissors"></i>
-        </div>
-        
-        <h1 class="text-4xl font-black text-gray-800 font-outfit mb-1 animate-slide-up" style="animation-delay: 0.1s">Bro<span class="text-barber-maroon">Ders</span></h1>
-        <p class="text-gray-500 text-sm font-medium mb-10 tracking-widest uppercase animate-slide-up" style="animation-delay: 0.2s">Management System</p>
-
-        <div class="w-full space-y-4 animate-slide-up" style="animation-delay: 0.3s">
-            <div>
-                <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Username</label>
-                <div class="relative">
-                    <i class="ph-fill ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                    <input type="text" id="login-user" class="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 text-sm outline-none focus:border-barber-maroon focus:ring-2 focus:ring-barber-maroon/20 font-medium" placeholder="Masukkan username">
-                </div>
-            </div>
-            <div>
-                <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Password</label>
-                <div class="relative">
-                    <i class="ph-fill ph-lock-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                    <input type="password" id="login-pass" class="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 text-sm outline-none focus:border-barber-maroon focus:ring-2 focus:ring-barber-maroon/20 font-medium" placeholder="••••••••">
-                </div>
+        <!-- LOGIN VIEW -->
+        <div id="view-login" class="view-section absolute inset-0 z-50 bg-[#0f172a] flex items-center justify-center px-6">
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                <div class="absolute -top-[10%] -left-[10%] w-64 h-64 bg-barber-maroon/30 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-[10%] -right-[10%] w-72 h-72 bg-barber-gold/20 rounded-full blur-3xl"></div>
             </div>
             
-            <button onclick="handleLogin()" id="btn-login" class="w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl shadow-barber-maroon/30 transition-transform active:scale-95 mt-8">
-                Masuk Sistem <i class="ph-bold ph-arrow-right"></i>
-            </button>
+            <div class="w-full bg-white/95 backdrop-blur-2xl rounded-[2.5rem] p-8 shadow-2xl relative z-10 border border-white/20">
+                <div class="text-center mb-10">
+                    <div class="w-20 h-20 shine-maroon rounded-[1.5rem] flex items-center justify-center mx-auto mb-5 shadow-lg shadow-barber-maroon/30 transform rotate-3">
+                        <i class="ph-fill ph-scissors text-4xl text-white -rotate-3"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit">Bro<span class="text-barber-maroon">Ders</span></h2>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Management System</p>
+                </div>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Username</label>
+                        <input type="text" id="login-user" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-4 text-gray-800 outline-none focus:border-barber-maroon focus:ring-4 focus:ring-barber-maroon/10 transition-all font-medium placeholder-gray-400" placeholder="Masukkan username">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Password</label>
+                        <input type="password" id="login-pass" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-4 text-gray-800 outline-none focus:border-barber-maroon focus:ring-4 focus:ring-barber-maroon/10 transition-all font-medium placeholder-gray-400" placeholder="••••••••">
+                    </div>
+                    <button onclick="handleLogin()" id="btn-login" class="w-full shine-maroon text-white py-4 rounded-2xl font-bold text-sm shadow-xl shadow-barber-maroon/30 mt-8 flex justify-center items-center gap-2 active:scale-95 transition-all hover:shadow-barber-maroon/50">
+                        <i class="ph-bold ph-sign-in text-lg"></i> MASUK
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- TAMPILAN APLIKASI UTAMA -->
-    <div id="app-main" class="app-container hidden">
-        
-        <header class="px-6 pt-12 pb-5 bg-white/70 backdrop-blur-xl border-b border-white rounded-b-[2.5rem] shadow-sm z-10 relative flex justify-between items-center">
-            <div>
-                <h1 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" id="header-subtitle">Halo, <span id="user-name-display">User</span></h1>
-                <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit" id="header-title">Bro<span class="text-barber-maroon">Ders</span></h2>
-            </div>
-            <button onclick="logout()" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 shadow-sm ring-2 ring-white active:scale-95">
-                <i class="ph-bold ph-sign-out text-lg"></i>
-            </button>
-        </header>
-
-        <main class="flex-1 overflow-y-auto no-scrollbar pb-32 relative" id="main-content">
+        <!-- MAIN APP WRAPPER -->
+        <div id="main-app" class="hidden flex-col h-full w-full">
             
-            <!-- VIEW: DASHBOARD (Hanya Owner) -->
-            <div id="view-dashboard" class="view-section px-6 py-5 space-y-6 hidden">
-                <div class="flex items-center justify-between glass-card px-5 py-3.5 rounded-2xl">
-                    <div class="flex items-center gap-3 text-barber-maroon">
-                        <i class="ph-bold ph-calendar-blank text-lg"></i>
-                        <span class="text-[11px] font-bold uppercase tracking-widest text-gray-500">Periode</span>
-                    </div>
-                    <input type="month" id="month-selector" class="bg-transparent text-sm font-extrabold text-gray-800 outline-none font-outfit" onchange="changePeriod(this.value)">
+            <header class="px-6 pt-12 pb-5 bg-white/70 backdrop-blur-xl border-b border-white rounded-b-[2.5rem] shadow-sm z-10 relative flex justify-between items-center">
+                <div class="animate-slide-up">
+                    <h1 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" id="header-subtitle">Overview</h1>
+                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit" id="header-title">Bro<span class="text-barber-maroon">Ders</span></h2>
                 </div>
+                <div class="flex items-center gap-3 animate-fade-in">
+                    <div class="text-right">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Role</p>
+                        <p class="text-xs font-bold text-barber-maroon capitalize" id="user-role-display">Owner</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full shine-maroon flex items-center justify-center text-xl shadow-[0_5px_15px_rgba(155,28,49,0.4)] ring-4 ring-white cursor-pointer" onclick="handleLogout()">
+                        <i class="ph-bold ph-sign-out"></i>
+                    </div>
+                </div>
+            </header>
 
-                <div class="shine-maroon rounded-[2rem] p-7 relative">
-                    <p class="text-white/80 text-xs font-medium mb-1">Saldo Bersih Bulan Ini</p>
-                    <h3 class="text-4xl font-black text-white mb-6 font-outfit" id="dash-balance">Rp 0</h3>
-                    <div class="flex justify-between border-t border-white/20 pt-4 mt-2">
-                        <div class="flex-1">
-                            <p class="text-white/70 text-[10px] mb-1 flex items-center gap-1 font-medium uppercase"><i class="ph-bold ph-arrow-down-left text-green-300"></i> Pemasukan</p>
-                            <p class="text-white font-bold text-sm font-outfit" id="dash-income">Rp 0</p>
+            <main class="flex-1 overflow-y-auto no-scrollbar pb-32 relative" id="main-content">
+                
+                <!-- VIEW: DASHBOARD (Owner Only) -->
+                <div id="view-dashboard" class="view-section px-6 py-5 space-y-6">
+                    <div class="flex items-center justify-between glass-card px-5 py-3.5 rounded-2xl">
+                        <div class="flex items-center gap-3 text-barber-maroon">
+                            <div class="w-8 h-8 rounded-full bg-barber-maroon/10 flex items-center justify-center">
+                                <i class="ph-bold ph-calendar-blank text-lg"></i>
+                            </div>
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-gray-500">Periode</span>
                         </div>
-                        <div class="flex-1 text-right">
-                            <p class="text-white/70 text-[10px] mb-1 flex items-center justify-end gap-1 font-medium uppercase"><i class="ph-bold ph-arrow-up-right text-red-300"></i> Pengeluaran</p>
-                            <p class="text-white font-bold text-sm font-outfit" id="dash-expense">Rp 0</p>
+                        <input type="month" id="month-selector" class="bg-transparent text-sm font-extrabold text-gray-800 outline-none cursor-pointer text-right font-outfit" onchange="changePeriod(this.value)">
+                    </div>
+
+                    <div id="global-loader" class="hidden justify-center py-4"><div class="w-8 h-8 border-4 border-barber-maroon/30 border-t-barber-maroon rounded-full animate-spin"></div></div>
+
+                    <div id="dashboard-content">
+                        <!-- Balance Card -->
+                        <div class="shine-maroon rounded-[2rem] p-7 relative animate-slide-up">
+                            <div class="absolute top-0 right-0 w-40 h-40 bg-white opacity-5 rounded-full -mr-10 -mt-10 animate-pulse-slow"></div>
+                            
+                            <p class="text-white/80 text-xs font-medium mb-1 tracking-wide">Saldo Bersih Bulan Ini</p>
+                            <h3 class="text-4xl font-black text-white mb-6 font-outfit tracking-tight" id="dash-balance">Rp 0</h3>
+                            
+                            <div class="flex justify-between border-t border-white/20 pt-4 mt-2">
+                                <div class="flex-1">
+                                    <p class="text-white/70 text-[10px] mb-1 flex items-center gap-1 font-medium uppercase tracking-wider"><i class="ph-bold ph-arrow-down-left text-green-300"></i> Pemasukan</p>
+                                    <p class="text-white font-bold text-sm font-outfit" id="dash-income">Rp 0</p>
+                                </div>
+                                <div class="w-px bg-white/20 mx-4"></div>
+                                <div class="flex-1 text-right">
+                                    <p class="text-white/70 text-[10px] mb-1 flex items-center justify-end gap-1 font-medium uppercase tracking-wider"><i class="ph-bold ph-arrow-up-right text-red-300"></i> Pengeluaran</p>
+                                    <p class="text-white font-bold text-sm font-outfit" id="dash-expense">Rp 0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Simple Chart -->
+                        <div class="glass-card rounded-[2rem] p-6 animate-slide-up mt-6">
+                            <div class="flex justify-between items-center mb-5">
+                                <h4 class="font-bold text-gray-800 text-sm">Grafik Arus Kas</h4>
+                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="ph-bold ph-trend-up"></i></div>
+                            </div>
+                            <div class="relative h-44 w-full">
+                                <canvas id="financeChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <div class="animate-slide-up mt-8 mb-6">
+                            <div class="flex justify-between items-center mb-5 px-1">
+                                <div>
+                                    <h4 class="font-extrabold text-gray-800 text-base tracking-tight">Riwayat Terakhir</h4>
+                                    <p class="text-[10px] text-gray-500 font-medium mt-0.5">Transaksi terbaru bulan ini</p>
+                                </div>
+                                <div class="bg-barber-maroon/5 border border-barber-maroon/10 px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-barber-maroon animate-pulse"></div>
+                                    <span class="text-[10px] font-bold text-barber-maroon uppercase tracking-wider" id="tx-count">0 Trx</span>
+                                </div>
+                            </div>
+                            <div id="transaction-list" class="space-y-3">
+                                <!-- Data transaksi akan dimuat disini oleh JavaScript -->
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <div class="flex justify-between items-end mb-4 px-2">
-                        <h4 class="font-bold text-gray-800 text-sm">Riwayat Terakhir</h4>
-                        <button onclick="fetchData()" class="text-[10px] font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full"><i class="ph-bold ph-arrows-clockwise"></i> Refresh</button>
-                    </div>
-                    <div id="transaction-list" class="space-y-3">
-                        <div class="text-center py-5"><div class="loader !border-barber-maroon !border-t-transparent"></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VIEW: INPUT (Semua Role) -->
-            <div id="view-input" class="view-section px-6 py-5 hidden">
-                <div class="flex bg-gray-200/80 p-1.5 rounded-2xl mb-6 backdrop-blur-md">
-                    <button class="flex-1 py-3 text-sm font-bold rounded-xl bg-white text-barber-maroon shadow-md transition-all" id="btn-tab-inc" onclick="toggleInputType('income')">Pemasukan</button>
-                    <button class="flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 transition-all" id="btn-tab-exp" onclick="toggleInputType('expense')">Pengeluaran</button>
-                </div>
-
-                <div class="glass-card rounded-[2rem] p-7 mb-6">
-                    <p class="text-center text-gray-500 text-xs font-bold uppercase mb-2" id="input-amount-label">Jumlah</p>
-                    <div class="flex items-center justify-center gap-2 mb-8 border-b-2 border-gray-100 pb-4">
-                        <span class="text-2xl font-bold text-gray-400 font-outfit">Rp</span>
-                        <input type="text" id="input-amount" class="modern-input" placeholder="0" oninput="formatRupiahInput(this)">
-                    </div>
-
-                    <p class="text-gray-800 text-sm font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-tag text-barber-maroon"></i> Pilih Kategori</p>
+                <!-- VIEW: INPUT (Semua Role) -->
+                <div id="view-input" class="view-section px-6 py-5 hidden">
                     
-                    <div class="grid grid-cols-3 gap-3 mb-8" id="grid-inc-cat">
-                        <!-- Pemasukan -->
-                        <div class="cat-wrap"><input type="radio" name="input-category" value="Cukur Rambut" class="category-radio hidden" checked><label class="flex flex-col items-center justify-center p-3 rounded-2xl border bg-white/50 text-gray-600 cursor-pointer"><i class="ph ph-scissors text-2xl mb-1"></i><span class="text-[10px] font-bold">Cukur</span></label></div>
-                        <div class="cat-wrap"><input type="radio" name="input-category" value="Cuci & Styling" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3 rounded-2xl border bg-white/50 text-gray-600 cursor-pointer"><i class="ph ph-drop text-2xl mb-1"></i><span class="text-[10px] font-bold">Cuci</span></label></div>
-                        <div class="cat-wrap"><input type="radio" name="input-category" value="Produk" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3 rounded-2xl border bg-white/50 text-gray-600 cursor-pointer"><i class="ph ph-package text-2xl mb-1"></i><span class="text-[10px] font-bold">Produk</span></label></div>
+                    <div class="flex bg-gray-200/80 p-1.5 rounded-2xl mb-6 backdrop-blur-md">
+                        <button class="flex-1 py-3 text-sm font-bold rounded-xl bg-white text-barber-maroon shadow-md transition-all duration-300" id="btn-tab-inc" onclick="toggleInputType('income')">Pemasukan</button>
+                        <button class="flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800 transition-all duration-300" id="btn-tab-exp" onclick="toggleInputType('expense')">Pengeluaran</button>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3 mb-8 hidden" id="grid-exp-cat">
-                        <!-- Pengeluaran -->
-                        <div class="cat-wrap"><input type="radio" name="input-category" value="Makan" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3 rounded-2xl border bg-white/50 text-gray-600 cursor-pointer"><i class="ph ph-fork-knife text-2xl mb-1"></i><span class="text-[10px] font-bold">Makan</span></label></div>
-                        <div class="cat-wrap"><input type="radio" name="input-category" value="Listrik/Air" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3 rounded-2xl border bg-white/50 text-gray-600 cursor-pointer"><i class="ph ph-lightning text-2xl mb-1"></i><span class="text-[10px] font-bold">Listrik</span></label></div>
-                        <div class="cat-wrap"><input type="radio" name="input-category" value="Lainnya" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3 rounded-2xl border bg-white/50 text-gray-600 cursor-pointer"><i class="ph ph-dots-three text-2xl mb-1"></i><span class="text-[10px] font-bold">Lainnya</span></label></div>
+                    <div class="glass-card rounded-[2rem] p-7 mb-6">
+                        <p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mb-2" id="input-amount-label">Jumlah Pemasukan</p>
+                        <div class="flex items-center justify-center gap-2 mb-8 border-b-2 border-gray-100 pb-4 transition-colors focus-within:border-barber-maroon/50">
+                            <span class="text-2xl font-bold text-gray-400 font-outfit">Rp</span>
+                            <input type="text" id="input-amount" class="modern-input" placeholder="0" oninput="formatRupiahInput(this)">
+                        </div>
+
+                        <p class="text-gray-800 text-sm font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-tag text-barber-maroon"></i> Pilih Kategori</p>
+                        
+                        <!-- Kategori Pemasukan -->
+                        <div class="grid grid-cols-3 gap-3 mb-8" id="grid-inc-cat">
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Cukur Rambut" class="category-radio hidden" checked><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-scissors text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Cukur</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Cuci & Styling" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-drop text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Cuci/Style</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Pewarnaan" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-paint-brush text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Warna</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Produk" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-package text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Produk</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Lain-lain" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-plus-circle text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Lainnya</span></label></div>
+                        </div>
+
+                        <!-- Kategori Pengeluaran -->
+                        <div class="grid grid-cols-3 gap-3 mb-8 hidden" id="grid-exp-cat">
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Makan" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-fork-knife text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Makan</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Air & Listrik" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-lightning text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Air & Listrik</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Sewa Tempat" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-storefront text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Sewa Tempat</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Gaji Pegawai" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-users text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Gaji Pegawai</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Alat & Bahan" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-spray-bottle text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Alat/Bahan</span></label></div>
+                            <div class="cat-wrap"><input type="radio" name="input-category" value="Lain-lain" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-dots-three-circle text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Lainnya</span></label></div>
+                        </div>
+
+                        <p class="text-gray-800 text-sm font-bold mb-3 flex items-center gap-2"><i class="ph-fill ph-note-pencil text-barber-maroon"></i> Catatan</p>
+                        <input type="text" id="input-note" placeholder="Tulis keterangan (opsional)..." class="w-full bg-white/80 shadow-sm border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-barber-maroon/50 transition-all font-medium">
                     </div>
 
-                    <input type="text" id="input-note" placeholder="Catatan (opsional)..." class="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-barber-maroon/50">
+                    <button onclick="saveTransaction()" id="btn-save" class="w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl shadow-barber-maroon/30 transition-transform active:scale-95">
+                        <i class="ph-bold ph-check-circle text-2xl"></i> <span>Simpan Pemasukan</span>
+                    </button>
                 </div>
 
-                <button onclick="saveTransaction()" id="btn-save" class="w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl active:scale-95">
-                    <i class="ph-bold ph-check-circle text-2xl"></i> Simpan Data
+                <!-- VIEW: SLIP GAJI (Owner Only) -->
+                <div id="view-gaji" class="view-section px-6 py-5 hidden">
+                    <div class="glass-card rounded-[2rem] p-6 mb-6" id="form-gaji">
+                        <h3 class="font-bold text-gray-800 mb-5 flex items-center gap-2 text-lg"><i class="ph-fill ph-user-circle text-2xl text-barber-maroon"></i> Detail Karyawan</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Nama Kapster / Barber</label>
+                                <input type="text" id="gaji-nama" placeholder="Masukkan nama..." class="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-barber-maroon focus:ring-2 focus:ring-barber-maroon/20 transition-all font-medium">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Periode Gaji</label>
+                                <input type="month" id="gaji-periode" class="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none font-outfit font-bold">
+                            </div>
+                            <div class="h-px w-full bg-gray-200 my-4"></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Gaji Pokok</label>
+                                    <input type="text" id="gaji-pokok" placeholder="Rp 0" oninput="formatRupiahInput(this)" class="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none text-right font-outfit font-bold">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Total Komisi</label>
+                                    <input type="text" id="gaji-komisi" placeholder="Rp 0" oninput="formatRupiahInput(this)" class="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none text-right text-green-600 font-outfit font-bold">
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="text-[11px] font-bold text-gray-500 mb-1.5 block uppercase tracking-wide">Potongan / Kasbon</label>
+                                    <input type="text" id="gaji-potongan" placeholder="Rp 0" oninput="formatRupiahInput(this)" class="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none text-right text-red-500 font-outfit font-bold">
+                                </div>
+                            </div>
+                            <button onclick="generateSlipPreview()" class="w-full mt-6 bg-gray-900 text-white py-3.5 rounded-xl font-bold text-sm shadow-xl flex justify-center items-center gap-2">
+                                <i class="ph-bold ph-magic-wand"></i> Buat Slip Gaji
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="preview-gaji" class="hidden mb-6 animate-fade-in">
+                        <div id="document-slip" class="bg-white rounded-t-3xl rounded-b-lg shadow-xl overflow-hidden relative border border-gray-100">
+                            <div class="bg-barber-dark text-center py-5 text-white relative">
+                                <h2 class="font-black text-2xl font-outfit">BroDers</h2><p class="text-[10px] uppercase mt-1">Premium Barbershop</p>
+                            </div>
+                            <div class="p-6">
+                                <div class="text-center mb-6 border-b border-gray-100 pb-4">
+                                    <h3 class="font-bold text-gray-800 text-lg">SLIP GAJI</h3>
+                                    <p class="text-xs text-gray-500" id="prev-gaji-periode">Periode: -</p>
+                                </div>
+                                <table class="w-full text-sm mb-5"><tr><td class="text-gray-500 w-1/3">Nama</td><td class="font-bold text-gray-800" id="prev-gaji-nama">: -</td></tr><tr><td class="text-gray-500">Jabatan</td><td class="font-bold text-gray-800">: Kapster</td></tr></table>
+                                <div class="bg-gray-50/50 rounded-xl p-5 mb-5 border border-gray-100">
+                                    <div class="flex justify-between text-sm mb-2"><span class="text-gray-600">Gaji Pokok</span><span class="font-bold font-outfit" id="prev-gaji-pokok">Rp 0</span></div>
+                                    <div class="flex justify-between text-sm mb-3 pb-3 border-b border-gray-200 border-dashed"><span class="text-gray-600">Komisi/Tips</span><span class="font-bold font-outfit" id="prev-gaji-komisi">Rp 0</span></div>
+                                    <div class="flex justify-between text-sm mb-3 pb-3 border-b border-gray-200 border-dashed"><span class="text-gray-600">Potongan</span><span class="font-bold text-red-500 font-outfit" id="prev-gaji-potongan">Rp 0</span></div>
+                                    <div class="flex justify-between mt-4 items-center"><span class="font-bold text-gray-800">Total Diterima</span><span class="font-black text-xl text-barber-maroon font-outfit" id="prev-gaji-total">Rp 0</span></div>
+                                </div>
+                                <div class="flex justify-between mt-8 text-center text-xs"><div class="w-1/2"><p class="text-gray-400 mb-10">Penerima,</p><p class="font-bold text-gray-800 border-b inline-block px-4 pb-1" id="prev-gaji-ttd">-</p></div><div class="w-1/2"><p class="text-gray-400 mb-10">Manajemen,</p><p class="font-bold text-gray-800 border-b inline-block px-4 pb-1">BroDers</p></div></div>
+                            </div>
+                            <div class="receipt-edge"></div>
+                        </div>
+                        <div class="flex gap-3 mt-5">
+                            <button onclick="editGaji()" class="bg-white border px-4 py-3 rounded-xl"><i class="ph-bold ph-pencil-simple"></i></button>
+                            <button onclick="exportPdf('document-slip', 'Slip_Gaji')" class="flex-1 bg-gray-900 text-white py-3 rounded-xl font-bold text-sm"><i class="ph-bold ph-file-pdf"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: LAPORAN (Owner Only) -->
+                <div id="view-laporan" class="view-section px-6 py-5 hidden">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="font-bold text-gray-800 text-lg">Laporan Keuangan</h3>
+                        <div class="bg-white px-3.5 py-1.5 rounded-full shadow-sm border border-gray-100 flex items-center gap-1.5">
+                            <i class="ph-bold ph-calendar text-barber-maroon text-sm"></i>
+                            <span class="text-xs font-bold text-gray-700" id="lap-month-display">Bulan</span>
+                        </div>
+                    </div>
+
+                    <div id="document-laporan" class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 mb-6 relative">
+                        <div class="text-center border-b border-gray-100 pb-5 mb-5">
+                            <h2 class="font-black text-xl text-barber-dark font-outfit">BRODERS BARBERSHOP</h2>
+                            <p class="text-[11px] text-gray-500 font-medium uppercase mt-1">Laporan Rekapitulasi</p>
+                            <p class="text-xs text-gray-600 font-bold bg-gray-50 inline-block px-4 py-1.5 rounded-full mt-3" id="lap-doc-periode">Periode: -</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div class="bg-green-50 rounded-2xl p-4 border border-green-100"><p class="text-[10px] text-green-600 font-bold uppercase mb-1">Pemasukan</p><p class="font-black text-gray-800 text-base font-outfit" id="lap-total-inc">Rp 0</p></div>
+                            <div class="bg-red-50 rounded-2xl p-4 border border-red-100"><p class="text-[10px] text-red-600 font-bold uppercase mb-1">Pengeluaran</p><p class="font-black text-gray-800 text-base font-outfit" id="lap-total-exp">Rp 0</p></div>
+                            <div class="col-span-2 bg-gray-900 rounded-2xl p-5 text-center"><p class="text-[11px] text-gray-300 mb-1 uppercase">Net Profit (Bersih)</p><p class="font-black text-white text-3xl font-outfit" id="lap-net-profit">Rp 0</p></div>
+                        </div>
+
+                        <!-- SECTION: REKAP PER KARYAWAN / USER -->
+                        <div class="bg-blue-50/50 rounded-2xl p-4 mb-5 border border-blue-100">
+                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800">
+                                <i class="ph-fill ph-users text-blue-600 text-lg"></i> Kinerja per Karyawan/User
+                            </h4>
+                            <div id="lap-list-staff" class="space-y-3">
+                                <!-- Data staff akan di-render disini -->
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-2xl p-4 mb-4 border">
+                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800"><i class="ph-fill ph-trend-up text-green-500 text-lg"></i> Rincian Pemasukan</h4>
+                            <div id="lap-list-inc" class="space-y-3"></div>
+                        </div>
+                        <div class="bg-gray-50 rounded-2xl p-4 mb-2 border">
+                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800"><i class="ph-fill ph-trend-down text-red-500 text-lg"></i> Rincian Pengeluaran</h4>
+                            <div id="lap-list-exp" class="space-y-3"></div>
+                        </div>
+                    </div>
+                    <button onclick="exportPdf('document-laporan', 'Laporan_Keuangan')" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-bold text-sm shadow-xl flex justify-center items-center gap-2">
+                        <i class="ph-bold ph-file-pdf text-xl"></i> Export PDF Laporan
+                    </button>
+                </div>
+
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="absolute bottom-0 w-full glass-nav rounded-t-[2.5rem] px-5 py-3 flex justify-between items-center z-20 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center gap-1.5 text-barber-maroon w-[25%] transition-colors duration-300" data-target="dashboard">
+                    <i class="ph-fill ph-squares-four text-[26px]"></i><span class="text-[9px] font-bold tracking-wide">Beranda</span>
                 </button>
-            </div>
-
-            <!-- VIEW: LAINNYA (Abaikan detail isi untuk space, logika UI Laporan/Gaji ada di sini, disembunyikan utk karyawan) -->
-            <div id="view-laporan" class="view-section px-6 py-5 hidden">
-                 <h3 class="font-bold text-gray-800 text-lg mb-4">Fitur Laporan (Hanya Owner)</h3>
-                 <!-- ... Struktur Laporan Sama Seperti Sebelumnya ... -->
-            </div>
-            <div id="view-gaji" class="view-section px-6 py-5 hidden">
-                 <h3 class="font-bold text-gray-800 text-lg mb-4">Fitur Slip Gaji (Hanya Owner)</h3>
-            </div>
-
-        </main>
-
-        <!-- Navigasi Bawah -->
-        <nav id="bottom-nav" class="absolute bottom-0 w-full glass-nav rounded-t-[2.5rem] px-5 py-3 flex justify-between items-center z-20 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-            <button onclick="switchTab('dashboard')" class="nav-btn-owner nav-btn flex flex-col items-center gap-1.5 text-barber-maroon w-[20%]" data-target="dashboard">
-                <i class="ph-fill ph-squares-four text-[26px]"></i>
-                <span class="text-[9px] font-bold">Beranda</span>
-            </button>
-            
-            <button onclick="switchTab('laporan')" class="nav-btn-owner nav-btn flex flex-col items-center gap-1.5 text-gray-400 w-[20%]" data-target="laporan">
-                <i class="ph-bold ph-chart-bar text-[26px]"></i>
-                <span class="text-[9px] font-semibold">Laporan</span>
-            </button>
-
-            <div class="w-[20%] flex justify-center -mt-12 relative z-30">
-                <button onclick="switchTab('input')" class="nav-btn w-[60px] h-[60px] shine-maroon rounded-full flex justify-center items-center shadow-xl ring-[6px] ring-[#F8FAFC]" data-target="input">
-                    <i class="ph-bold ph-plus text-[28px] text-white"></i>
+                
+                <button onclick="switchTab('laporan')" id="nav-laporan" class="nav-btn flex flex-col items-center gap-1.5 text-gray-400 w-[25%] transition-colors duration-300" data-target="laporan">
+                    <i class="ph-bold ph-chart-bar text-[26px]"></i><span class="text-[9px] font-semibold tracking-wide">Laporan</span>
                 </button>
-            </div>
-            
-            <button onclick="switchTab('gaji')" class="nav-btn-owner nav-btn flex flex-col items-center gap-1.5 text-gray-400 w-[20%]" data-target="gaji">
-                <i class="ph-bold ph-receipt text-[26px]"></i>
-                <span class="text-[9px] font-semibold">Gaji</span>
-            </button>
-            
-            <button class="flex flex-col items-center gap-1.5 text-gray-300 w-[20%]">
-                <i class="ph-bold ph-user text-[26px]"></i>
-                <span class="text-[9px] font-semibold">Profil</span>
-            </button>
-        </nav>
 
-        <div id="toast" class="toast fixed top-6 left-1/2 -translate-x-1/2 -translate-y-[200%] bg-gray-900/95 text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 z-50">
+                <div class="w-[25%] flex justify-center -mt-12 relative z-30">
+                    <button onclick="switchTab('input')" id="nav-input" class="nav-btn w-[60px] h-[60px] shine-maroon rounded-full flex flex-col items-center justify-center shadow-xl ring-[6px] ring-[#F8FAFC]" data-target="input">
+                        <i class="ph-bold ph-plus text-[28px] text-white"></i>
+                    </button>
+                </div>
+                
+                <button onclick="switchTab('gaji')" id="nav-gaji" class="nav-btn flex flex-col items-center gap-1.5 text-gray-400 w-[25%] transition-colors duration-300" data-target="gaji">
+                    <i class="ph-bold ph-receipt text-[26px]"></i><span class="text-[9px] font-semibold tracking-wide">Slip Gaji</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast fixed top-6 left-1/2 -translate-x-1/2 -translate-y-[200%] bg-gray-900/95 backdrop-blur-sm text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 z-50 min-w-max border border-gray-700">
             <i class="ph-fill ph-check-circle text-green-400 text-xl" id="toast-icon"></i>
             <span class="text-sm font-semibold tracking-wide" id="toast-msg">Tersimpan!</span>
         </div>
+
     </div>
 
     <script>
-        /**
-         * PASTE URL WEB APP DARI GOOGLE APPS SCRIPT DI SINI
-         */
-        const API_URL = "https://script.google.com/macros/s/AKfycbya9gnb54HehCPhgt4O7kxSvVvrLS7P_TXsCSznY7lLOOrcY0c0Eza-4M1aDjIyGh3A/exec";
-        
-        let currentUser = JSON.parse(localStorage.getItem('barber_user')) || null;
-        let selectedPeriod = new Date().toISOString().slice(0, 7); 
-        let currentInputType = 'income';
+        // ==========================================
+        // GANTI URL INI DENGAN URL WEB APP GOOGLE SCRIPT ANDA
+        // ==========================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbzOC1NsKL7NTU0hGVd0Jy53zkEe1k0j4aWbaTdfIfbyBbDVXbXBvb0xuvWY9Yjcye_v/exec";
+        let currentUser = null;
         let transactions = [];
+        let financeChartInstance = null;
+        let selectedPeriod = new Date().toISOString().slice(0, 7);
+        let currentInputType = 'income';
 
-        // --- PWA Service Worker Registration ---
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('SW Registered!', reg))
-            .catch(err => console.error('SW Error', err));
-        }
-
+        // --- UTILS ---
+        const formatRupiah = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+        const parseRupiah = (str) => parseInt(str.replace(/[^,\d]/g, '').toString()) || 0;
+        const formatRupiahInput = (input) => {
+            let value = input.value.replace(/[^,\d]/g, '');
+            let split = value.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+            if (ribuan) { let separator = sisa ? '.' : ''; rupiah += separator + ribuan.join('.'); }
+            input.value = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        };
         const showToast = (msg, isError = false) => {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
-            document.getElementById('toast-icon').className = isError ? "ph-fill ph-warning-circle text-red-400 text-xl" : "ph-fill ph-check-circle text-green-400 text-xl";
+            document.getElementById('toast-icon').className = isError ? "ph-fill ph-warning-circle text-red-400" : "ph-fill ph-check-circle text-green-400";
             toast.style.transform = 'translate(-50%, 0)';
             setTimeout(() => toast.style.transform = 'translate(-50%, -200%)', 2500);
         };
-
-        const formatRupiah = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
-        const parseRupiah = (str) => parseInt(str.replace(/[^,\d]/g, '')) || 0;
-        const formatRupiahInput = (input) => {
-            let val = input.value.replace(/[^,\d]/g, '');
-            input.value = new Intl.NumberFormat('id-ID').format(val);
+        const getMonthName = (yyyymm) => {
+            if (!yyyymm) return '-';
+            const date = new Date(yyyymm + '-01');
+            return date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
         };
 
-        // --- LOGIN LOGIC ---
+        // --- API CALLER ---
+        async function fetchAPI(payload) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch (err) {
+                console.error("API Error:", err);
+                showToast("Koneksi gagal/Server Error!", true);
+                return {success: false};
+            }
+        }
+
+        // --- AUTH & INIT ---
         window.onload = () => {
             document.getElementById('month-selector').value = selectedPeriod;
-            if (currentUser) {
+            checkAuth();
+        };
+
+        function checkAuth() {
+            const stored = localStorage.getItem('broders_user');
+            if (stored) {
+                currentUser = JSON.parse(stored);
                 initApp();
             } else {
-                document.getElementById('login-view').classList.remove('hidden');
+                document.getElementById('view-login').classList.remove('hidden');
+                document.getElementById('main-app').classList.add('hidden');
             }
-        };
+        }
 
-        const handleLogin = async () => {
-            const user = document.getElementById('login-user').value;
-            const pass = document.getElementById('login-pass').value;
+        async function handleLogin() {
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
             const btn = document.getElementById('btn-login');
             
-            if(!user || !pass) return showToast('Isi Username & Password!', true);
+            if(!u || !p) return showToast("Isi username & password", true);
             
-            btn.innerHTML = '<div class="loader"></div> Memproses...';
+            btn.innerHTML = '<div class="loader"></div>';
+            btn.disabled = true;
+
+            const res = await fetchAPI({ action: 'login', username: u, password: p });
             
-            try {
-                const res = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'login', username: user, password: pass })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'success') {
-                    localStorage.setItem('barber_user', JSON.stringify(data.user));
-                    currentUser = data.user;
-                    initApp();
-                } else {
-                    showToast(data.message, true);
-                    btn.innerHTML = 'Masuk Sistem <i class="ph-bold ph-arrow-right"></i>';
-                }
-            } catch (err) {
-                showToast("Gagal koneksi ke server", true);
-                btn.innerHTML = 'Masuk Sistem <i class="ph-bold ph-arrow-right"></i>';
+            btn.innerHTML = '<i class="ph-bold ph-sign-in text-lg"></i> MASUK';
+            btn.disabled = false;
+
+            if (res && res.success) {
+                currentUser = res.user;
+                localStorage.setItem('broders_user', JSON.stringify(currentUser));
+                initApp();
+            } else {
+                showToast(res.message || "Login Gagal", true);
             }
-        };
+        }
 
-        const logout = () => {
-            localStorage.removeItem('barber_user');
+        function handleLogout() {
+            localStorage.removeItem('broders_user');
             location.reload();
-        };
+        }
 
-        const initApp = () => {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('app-main').classList.remove('hidden');
-            document.getElementById('user-name-display').innerText = currentUser.name;
+        function initApp() {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('main-app').classList.add('flex');
+            
+            document.getElementById('user-role-display').innerText = currentUser.role;
 
+            // Role Based Access
             if (currentUser.role === 'karyawan') {
-                // Sembunyikan menu navigasi khusus owner
-                document.querySelectorAll('.nav-btn-owner').forEach(el => el.classList.add('hidden'));
-                // Otomatis arahkan ke Input
+                document.getElementById('nav-dashboard').style.display = 'none';
+                document.getElementById('nav-laporan').style.display = 'none';
+                document.getElementById('nav-gaji').style.display = 'none';
                 switchTab('input');
             } else {
-                // Owner
-                document.querySelectorAll('.nav-btn-owner').forEach(el => el.classList.remove('hidden'));
                 switchTab('dashboard');
+                loadDashboardData();
             }
-        };
+        }
 
-        // --- NAVIGATION & UI ---
+        // --- NAVIGATION ---
         const switchTab = (tabId) => {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const targetView = document.getElementById(`view-${tabId}`);
+            if(targetView) targetView.classList.remove('hidden');
+
+            const titles = {
+                'dashboard': { sub: 'Overview', main: 'Bro<span class="text-barber-maroon">Ders</span>' },
+                'input': { sub: 'Pencatatan', main: 'Transaksi' },
+                'gaji': { sub: 'Dokumen', main: 'Slip Gaji' },
+                'laporan': { sub: 'Analitik', main: 'Laporan' }
+            };
+            if(titles[tabId]) {
+                document.getElementById('header-subtitle').innerHTML = titles[tabId].sub;
+                document.getElementById('header-title').innerHTML = titles[tabId].main;
+            }
 
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                if(btn.dataset.target !== 'input') {
-                    const isTarget = btn.dataset.target === tabId;
-                    btn.classList.toggle('text-barber-maroon', isTarget);
-                    btn.classList.toggle('text-gray-400', !isTarget);
-                }
+                const target = btn.dataset.target;
+                if(!target || target === 'input') return;
+                const isTarget = target === tabId;
+                btn.classList.toggle('text-barber-maroon', isTarget);
+                btn.classList.toggle('text-gray-400', !isTarget);
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = isTarget ? icon.className.replace('ph-bold', 'ph-fill') : icon.className.replace('ph-fill', 'ph-bold');
             });
 
-            if(tabId === 'dashboard' && currentUser.role === 'owner') fetchData();
+            if (tabId === 'dashboard' && currentUser.role !== 'karyawan') loadDashboardData();
+            if (tabId === 'laporan') generateLaporan();
+            if (tabId === 'gaji' && !document.getElementById('gaji-periode').value) {
+                document.getElementById('gaji-periode').value = selectedPeriod;
+            }
         };
 
+        // --- DATA LOGIC ---
+        const changePeriod = (val) => {
+            if(!val) return;
+            selectedPeriod = val;
+            loadDashboardData();
+        };
+
+        async function loadDashboardData() {
+            document.getElementById('global-loader').classList.remove('hidden');
+            document.getElementById('global-loader').classList.add('flex');
+            document.getElementById('dashboard-content').classList.add('hidden');
+            
+            const res = await fetchAPI({ action: 'getData', month: selectedPeriod });
+            
+            document.getElementById('global-loader').classList.add('hidden');
+            document.getElementById('global-loader').classList.remove('flex');
+            document.getElementById('dashboard-content').classList.remove('hidden');
+
+            if (res && res.success) {
+                transactions = res.data;
+                updateDashboardUI();
+            }
+        }
+
+        function updateDashboardUI() {
+            let totalInc = 0, totalExp = 0;
+            transactions.forEach(t => { 
+                if(t.type === 'income') totalInc += parseInt(t.amount); 
+                else totalExp += parseInt(t.amount); 
+            });
+
+            document.getElementById('dash-balance').innerText = formatRupiah(totalInc - totalExp);
+            document.getElementById('dash-income').innerText = formatRupiah(totalInc);
+            document.getElementById('dash-expense').innerText = formatRupiah(totalExp);
+
+            renderTransactionList();
+            renderSimpleChart();
+        }
+
+        // --- INPUT LOGIC ---
         const toggleInputType = (type) => {
             currentInputType = type;
-            const isInc = type === 'income';
-            
-            document.getElementById('grid-inc-cat').classList.toggle('hidden', !isInc);
-            document.getElementById('grid-exp-cat').classList.toggle('hidden', isInc);
-            
-            document.getElementById('btn-tab-inc').className = isInc ? "flex-1 py-3 text-sm font-bold rounded-xl bg-white text-barber-maroon shadow-md" : "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500";
-            document.getElementById('btn-tab-exp').className = !isInc ? "flex-1 py-3 text-sm font-bold rounded-xl bg-gray-800 text-white shadow-md" : "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500";
-            
+            const btnInc = document.getElementById('btn-tab-inc');
+            const btnExp = document.getElementById('btn-tab-exp');
+            const gridInc = document.getElementById('grid-inc-cat');
+            const gridExp = document.getElementById('grid-exp-cat');
             const btnSave = document.getElementById('btn-save');
-            if(isInc) {
-                btnSave.className = "w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl";
-                btnSave.innerHTML = '<i class="ph-bold ph-check-circle text-2xl"></i> Simpan Pemasukan';
-                document.getElementById('grid-inc-cat').querySelectorAll('input').forEach(i => i.disabled = false);
-            } else {
-                btnSave.className = "w-full bg-gray-800 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl";
-                btnSave.innerHTML = '<i class="ph-bold ph-minus-circle text-2xl"></i> Catat Pengeluaran';
-                document.getElementById('grid-exp-cat').querySelectorAll('input').forEach(i => i.disabled = false);
-            }
-        };
 
-        // --- API INTEGRATION ---
-        const changePeriod = (val) => { selectedPeriod = val; fetchData(); };
-
-        const fetchData = async () => {
-            if(currentUser.role !== 'owner') return;
-            document.getElementById('transaction-list').innerHTML = '<div class="text-center py-5"><div class="loader !border-barber-maroon !border-t-transparent"></div></div>';
-            
-            try {
-                const res = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'getData', month: selectedPeriod })
-                });
-                const response = await res.json();
+            if(type === 'income') {
+                btnInc.className = "flex-1 py-3 text-sm font-bold rounded-xl bg-white text-barber-maroon shadow-md";
+                btnExp.className = "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800";
+                gridInc.classList.remove('hidden'); gridExp.classList.add('hidden');
                 
-                if(response.status === 'success') {
-                    transactions = response.data;
-                    updateDashboardUI();
-                }
-            } catch (error) {
-                showToast("Gagal mengambil data", true);
-            }
-        };
+                gridInc.querySelectorAll('input').forEach(i => i.disabled = false);
+                gridExp.querySelectorAll('input').forEach(i => i.disabled = true);
+                if(!gridInc.querySelector('input:checked')) gridInc.querySelector('input').checked = true;
 
-        const updateDashboardUI = () => {
-            let inc = 0, exp = 0;
-            const listEl = document.getElementById('transaction-list');
-            listEl.innerHTML = '';
-
-            transactions.forEach(t => {
-                if(t.type === 'income') inc += t.amount; else exp += t.amount;
-            });
-
-            document.getElementById('dash-balance').innerText = formatRupiah(inc - exp);
-            document.getElementById('dash-income').innerText = formatRupiah(inc);
-            document.getElementById('dash-expense').innerText = formatRupiah(exp);
-
-            if(transactions.length === 0) {
-                listEl.innerHTML = `<p class="text-xs text-center text-gray-500 py-5">Belum ada transaksi.</p>`;
+                btnSave.className = "w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl";
+                btnSave.innerHTML = '<i class="ph-bold ph-check-circle text-2xl"></i> <span>Simpan Pemasukan</span>';
             } else {
-                transactions.slice(0, 10).forEach(t => {
-                    const isInc = t.type === 'income';
-                    const icon = isInc ? 'ph-trend-up text-green-500 bg-green-100' : 'ph-trend-down text-red-500 bg-red-100';
-                    const color = isInc ? 'text-green-600' : 'text-gray-800';
-                    const d = new Date(t.date);
-                    const time = `${d.getDate()} ${d.toLocaleDateString('id',{month:'short'})}`;
+                btnExp.className = "flex-1 py-3 text-sm font-bold rounded-xl bg-gray-800 text-white shadow-md";
+                btnInc.className = "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800";
+                gridExp.classList.remove('hidden'); gridInc.classList.add('hidden');
+                
+                gridExp.querySelectorAll('input').forEach(i => i.disabled = false);
+                gridInc.querySelectorAll('input').forEach(i => i.disabled = true);
+                if(!gridExp.querySelector('input:checked')) gridExp.querySelector('input').checked = true;
 
-                    listEl.innerHTML += `
-                    <div class="glass-card flex items-center justify-between p-4 rounded-2xl mb-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center ${icon}"><i class="ph-bold ${icon.split(' ')[0]}"></i></div>
-                            <div>
-                                <p class="text-sm font-bold text-gray-800">${t.category}</p>
-                                <p class="text-[10px] text-gray-500">${time} • ${t.username}</p>
-                            </div>
-                        </div>
-                        <p class="text-sm font-black font-outfit ${color}">${isInc?'+':'-'} ${formatRupiah(t.amount)}</p>
-                    </div>`;
-                });
+                btnSave.className = "w-full bg-gray-800 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl";
+                btnSave.innerHTML = '<i class="ph-bold ph-minus-circle text-2xl"></i> <span>Catat Pengeluaran</span>';
             }
         };
 
-        const saveTransaction = async () => {
+        async function saveTransaction() {
             const amount = parseRupiah(document.getElementById('input-amount').value);
             const categoryEl = document.querySelector('input[name="input-category"]:checked');
             const note = document.getElementById('input-note').value;
-            const btn = document.getElementById('btn-save');
 
-            if (amount <= 0 || !categoryEl) return showToast("Nominal & Kategori Wajib Diisi!", true);
+            if (amount <= 0 || !categoryEl) return showToast("Data tidak lengkap!", true);
 
-            btn.innerHTML = '<div class="loader"></div> Menyimpan...';
-            btn.disabled = true;
+            const btnSave = document.getElementById('btn-save');
+            const originalBtnHtml = btnSave.innerHTML;
+            btnSave.innerHTML = '<div class="loader"></div> <span>Menyimpan...</span>';
+            btnSave.disabled = true;
 
             const payload = {
                 action: 'addTransaction',
+                id: Date.now().toString(),
                 type: currentInputType,
                 amount: amount,
                 category: categoryEl.value,
                 note: note,
-                username: currentUser.username
+                date: new Date().toISOString(),
+                inputBy: currentUser.username
             };
 
-            try {
-                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
-                const result = await res.json();
+            const res = await fetchAPI(payload);
+
+            btnSave.innerHTML = originalBtnHtml;
+            btnSave.disabled = false;
+
+            if(res && res.success) {
+                document.getElementById('input-amount').value = '';
+                document.getElementById('input-note').value = '';
+                showToast("Tersimpan di Database!");
                 
-                if(result.status === 'success') {
-                    document.getElementById('input-amount').value = '';
-                    document.getElementById('input-note').value = '';
-                    showToast("Berhasil Disimpan!");
-                    
-                    if(currentUser.role === 'owner') {
-                        setTimeout(() => { switchTab('dashboard'); fetchData(); }, 1000);
-                    } else {
-                        // Karyawan tetap di halaman input
-                        toggleInputType(currentInputType); // reset button state
-                    }
+                if (currentUser.role !== 'karyawan') {
+                    setTimeout(() => switchTab('dashboard'), 800);
                 }
-            } catch (error) {
-                showToast("Gagal menyimpan data", true);
-                toggleInputType(currentInputType); // reset button state
             }
-            btn.disabled = false;
+        }
+
+        // --- FUNGSI SLIP GAJI ---
+        const generateSlipPreview = () => {
+            const nama = document.getElementById('gaji-nama').value;
+            const periode = document.getElementById('gaji-periode').value;
+            const pokok = parseRupiah(document.getElementById('gaji-pokok').value) || 0;
+            const komisi = parseRupiah(document.getElementById('gaji-komisi').value) || 0;
+            const potongan = parseRupiah(document.getElementById('gaji-potongan').value) || 0;
+
+            if(!nama || !periode) {
+                showToast("Nama dan Periode wajib diisi!", true);
+                return;
+            }
+
+            const total = pokok + komisi - potongan;
+
+            document.getElementById('prev-gaji-nama').innerText = `: ${nama}`;
+            document.getElementById('prev-gaji-ttd').innerText = nama;
+            document.getElementById('prev-gaji-periode').innerText = `Periode: ${getMonthName(periode)}`;
+            
+            document.getElementById('prev-gaji-pokok').innerText = formatRupiah(pokok);
+            document.getElementById('prev-gaji-komisi').innerText = formatRupiah(komisi);
+            document.getElementById('prev-gaji-potongan').innerText = formatRupiah(potongan);
+            document.getElementById('prev-gaji-total').innerText = formatRupiah(total);
+
+            document.getElementById('form-gaji').classList.add('hidden');
+            document.getElementById('preview-gaji').classList.remove('hidden');
+        };
+
+        const editGaji = () => {
+            document.getElementById('preview-gaji').classList.add('hidden');
+            document.getElementById('form-gaji').classList.remove('hidden');
+        };
+
+        // Helper untuk mendapatkan ikon berdasarkan kategori
+        const getCategoryIcon = (category) => {
+            const lowerCat = category.toLowerCase();
+            if (lowerCat.includes('cukur')) return 'ph-scissors';
+            if (lowerCat.includes('cuci') || lowerCat.includes('styling')) return 'ph-drop';
+            if (lowerCat.includes('warna')) return 'ph-paint-brush';
+            if (lowerCat.includes('produk')) return 'ph-package';
+            if (lowerCat.includes('makan')) return 'ph-fork-knife';
+            if (lowerCat.includes('air') || lowerCat.includes('listrik')) return 'ph-lightning';
+            if (lowerCat.includes('sewa')) return 'ph-storefront';
+            if (lowerCat.includes('gaji')) return 'ph-users';
+            if (lowerCat.includes('alat') || lowerCat.includes('bahan')) return 'ph-spray-bottle';
+            return 'ph-receipt'; // default
+        };
+
+        const renderTransactionList = () => {
+            const listEl = document.getElementById('transaction-list');
+            listEl.innerHTML = '';
+            document.getElementById('tx-count').innerText = `${transactions.length} Trx`;
+            
+            // Empty State
+            if (transactions.length === 0) { 
+                listEl.innerHTML = `
+                    <div class="bg-white border border-dashed border-gray-300 rounded-[2rem] p-8 text-center flex flex-col items-center justify-center shadow-sm">
+                        <div class="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-4 border border-gray-100">
+                            <i class="ph-fill ph-receipt text-3xl text-gray-300"></i>
+                        </div>
+                        <p class="text-sm font-bold text-gray-600">Belum ada transaksi</p>
+                        <p class="text-[10px] text-gray-400 mt-1.5 font-medium max-w-[200px]">Data pemasukan dan pengeluaran bulan ini akan muncul di sini.</p>
+                    </div>`; 
+                return; 
+            }
+            
+            // Sort by newest
+            transactions.sort((a, b) => new Date(b.date) - new Date(a.date)); 
+            
+            // Render limit to 6 items on dashboard
+            transactions.slice(0, 6).forEach(t => {
+                const isInc = t.type === 'income';
+                const d = new Date(t.date);
+                
+                // Format Waktu & Tanggal
+                const options = { weekday: 'short', day: 'numeric', month: 'short' };
+                const dateStr = d.toLocaleDateString('id-ID', options);
+                const timeStr = `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+                
+                // Tema modern per tipe
+                const catIcon = getCategoryIcon(t.category);
+                const bgIcon = isInc ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-500 border-red-100';
+                const amountColor = isInc ? 'text-green-600' : 'text-gray-800';
+                const sign = isInc ? '+' : '-';
+                
+                // Avatar dan User
+                const inputter = t.inputBy || 'Sistem';
+                const initial = inputter.charAt(0).toUpperCase();
+
+                listEl.innerHTML += `
+                    <div class="bg-white border border-gray-100 hover:border-barber-maroon/30 hover:shadow-md transition-all duration-300 flex items-center justify-between p-4 rounded-2xl relative overflow-hidden group cursor-pointer">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        
+                        <div class="flex items-center gap-4 relative z-10 w-full">
+                            <div class="w-12 h-12 min-w-[48px] rounded-[1rem] flex items-center justify-center ${bgIcon} border shadow-sm">
+                                <i class="ph-fill ${catIcon} text-2xl"></i>
+                            </div>
+                            
+                            <div class="flex-1 min-w-0 pr-2">
+                                <p class="text-sm font-extrabold text-gray-800 capitalize leading-tight mb-1 truncate">${t.category}</p>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-[10px] font-semibold text-gray-400 whitespace-nowrap">${dateStr}, ${timeStr}</span>
+                                    <div class="w-1 h-1 rounded-full bg-gray-300"></div>
+                                    <div class="flex items-center gap-1.5 bg-gray-50 px-1.5 py-0.5 rounded-md border border-gray-100">
+                                        <div class="w-3.5 h-3.5 rounded-full bg-gray-200 flex items-center justify-center text-[7px] font-black text-gray-600">${initial}</div>
+                                        <span class="text-[9px] font-bold text-gray-500 capitalize">${inputter}</span>
+                                    </div>
+                                </div>
+                                ${t.note ? `<p class="text-[10px] text-gray-500 mt-1.5 truncate border-l-2 border-gray-200 pl-2">"${t.note}"</p>` : ''}
+                            </div>
+                            
+                            <div class="relative z-10 text-right shrink-0">
+                                <p class="text-[15px] font-black font-outfit tracking-tight ${amountColor}">${sign}${formatRupiah(t.amount)}</p>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        };
+
+        const renderSimpleChart = () => {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            const days = new Date(parseInt(selectedPeriod.split('-')[0]), parseInt(selectedPeriod.split('-')[1]), 0).getDate();
+            const labels = Array.from({length: days}, (_, i) => i + 1);
+            const netData = new Array(days).fill(0);
+
+            transactions.forEach(t => {
+                const dayIdx = new Date(t.date).getDate() - 1;
+                netData[dayIdx] += (t.type === 'income' ? parseInt(t.amount) : -parseInt(t.amount));
+            });
+
+            let cumulative = 0; const trendData = netData.map(val => { cumulative += val; return cumulative; });
+            if (financeChartInstance) financeChartInstance.destroy();
+            let grad = ctx.createLinearGradient(0, 0, 0, 180);
+            grad.addColorStop(0, "rgba(155, 28, 49, 0.4)"); grad.addColorStop(1, "rgba(155, 28, 49, 0)");
+            
+            financeChartInstance = new Chart(ctx, {
+                type: 'line', data: { labels: labels, datasets: [{ data: trendData, borderColor: '#9B1C31', backgroundColor: grad, borderWidth: 3, fill: true, tension: 0.4 }] },
+                options: { plugins: {legend: {display: false}}, scales: { x: {display: false}, y: {display: false} } }
+            });
+        };
+
+        // FUNGSI UTAMA BARU: Laporan Kinerja
+        const generateLaporan = () => {
+            let totalInc = 0, totalExp = 0;
+            const catInc = {}, catExp = {};
+            const staffStats = {}; // Objek untuk menyimpan rekap per user
+
+            transactions.forEach(t => {
+                const amt = parseInt(t.amount);
+                const user = t.inputBy || 'Sistem';
+
+                // Inisialisasi statistik staff jika belum ada
+                if (!staffStats[user]) {
+                    staffStats[user] = { inc: 0, exp: 0 };
+                }
+
+                if(t.type === 'income') { 
+                    totalInc += amt; 
+                    catInc[t.category] = (catInc[t.category] || 0) + amt; 
+                    staffStats[user].inc += amt; // Tambah ke statistik user
+                } else { 
+                    totalExp += amt; 
+                    catExp[t.category] = (catExp[t.category] || 0) + amt; 
+                    staffStats[user].exp += amt; // Tambah ke statistik user
+                }
+            });
+
+            // Update UI Total Keseluruhan
+            document.getElementById('lap-total-inc').innerText = formatRupiah(totalInc);
+            document.getElementById('lap-total-exp').innerText = formatRupiah(totalExp);
+            document.getElementById('lap-net-profit').innerText = formatRupiah(totalInc - totalExp);
+            
+            document.getElementById('lap-month-display').innerText = getMonthName(selectedPeriod);
+            document.getElementById('lap-doc-periode').innerText = `Periode: ${getMonthName(selectedPeriod)}`;
+
+            // Render Progress Bar Kategori Pemasukan
+            let incHtml = '';
+            for(const [cat, val] of Object.entries(catInc).sort((a,b) => b[1]-a[1])) {
+                const pct = totalInc > 0 ? (val / totalInc) * 100 : 0;
+                incHtml += `
+                    <div class="mb-3">
+                        <div class="flex justify-between text-[11px] mb-1.5"><span class="text-gray-600 font-medium">${cat}</span><span class="font-bold font-outfit text-gray-800">${formatRupiah(val)}</span></div>
+                        <div class="w-full bg-gray-200/80 rounded-full h-2 overflow-hidden"><div class="bg-gradient-to-r from-green-400 to-green-500 h-2 rounded-full transition-all duration-1000" style="width: ${pct}%"></div></div>
+                    </div>`;
+            }
+            document.getElementById('lap-list-inc').innerHTML = incHtml || '<p class="text-[11px] text-gray-400 italic text-center py-2">Belum ada data pemasukan</p>';
+
+            // Render Progress Bar Kategori Pengeluaran
+            let expHtml = '';
+            for(const [cat, val] of Object.entries(catExp).sort((a,b) => b[1]-a[1])) {
+                const pct = totalExp > 0 ? (val / totalExp) * 100 : 0;
+                expHtml += `
+                    <div class="mb-3">
+                        <div class="flex justify-between text-[11px] mb-1.5"><span class="text-gray-600 font-medium">${cat}</span><span class="font-bold font-outfit text-gray-800">${formatRupiah(val)}</span></div>
+                        <div class="w-full bg-gray-200/80 rounded-full h-2 overflow-hidden"><div class="bg-gradient-to-r from-red-400 to-red-500 h-2 rounded-full transition-all duration-1000" style="width: ${pct}%"></div></div>
+                    </div>`;
+            }
+            document.getElementById('lap-list-exp').innerHTML = expHtml || '<p class="text-[11px] text-gray-400 italic text-center py-2">Belum ada data pengeluaran</p>';
+
+            // Render Kartu Rekap Per Karyawan (Fitur Baru)
+            let staffHtml = '';
+            for(const [user, stats] of Object.entries(staffStats)) {
+                const net = stats.inc - stats.exp;
+                const isOwner = user.toLowerCase() === 'owner' || user.toLowerCase() === 'admin' || user.toLowerCase() === 'bos';
+                
+                // Visual pembeda antara Owner dan Karyawan biasa
+                const badgeColor = isOwner ? 'bg-barber-gold/20 text-yellow-600' : 'bg-blue-100 text-blue-600';
+                const icon = isOwner ? 'ph-crown' : 'ph-user';
+                const borderColor = isOwner ? 'border-yellow-200' : 'border-blue-100';
+                
+                staffHtml += `
+                    <div class="bg-white rounded-xl p-3 border ${borderColor} shadow-sm relative overflow-hidden transition-all hover:shadow-md">
+                        <div class="absolute left-0 top-0 h-full w-1 ${isOwner ? 'bg-barber-gold' : 'bg-blue-500'}"></div>
+                        
+                        <div class="flex justify-between items-center mb-2 pb-2 border-b border-gray-50 pl-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-full ${badgeColor} flex items-center justify-center">
+                                    <i class="ph-fill ${icon} text-lg"></i>
+                                </div>
+                                <div>
+                                    <span class="font-extrabold text-[13px] text-gray-800 capitalize block leading-tight">${user}</span>
+                                    <span class="text-[9px] text-gray-400 font-medium">${isOwner ? 'Manajemen' : 'Karyawan / Kapster'}</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[9px] text-gray-400 uppercase tracking-widest block font-bold mb-0.5">Net Dihasilkan</span>
+                                <span class="text-sm font-black text-gray-800 font-outfit">${formatRupiah(net)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-[10px] pl-2 mt-1">
+                            <div class="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-lg">
+                                <i class="ph-bold ph-arrow-down-left text-green-500"></i>
+                                <span class="text-gray-500 font-medium">Masuk:</span>
+                                <span class="font-bold text-green-600 font-outfit">${formatRupiah(stats.inc)}</span>
+                            </div>
+                            <div class="flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg">
+                                <i class="ph-bold ph-arrow-up-right text-red-500"></i>
+                                <span class="text-gray-500 font-medium">Keluar:</span>
+                                <span class="font-bold text-red-500 font-outfit">${formatRupiah(stats.exp)}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            document.getElementById('lap-list-staff').innerHTML = staffHtml || '<p class="text-[11px] text-gray-400 italic text-center py-3">Belum ada aktivitas user di bulan ini.</p>';
+        };
+        
+        const exportPdf = (elId, name) => {
+            // Sembunyikan elemen dekoratif sesaat agar PDF lebih bersih
+            const btn = document.querySelector(`#${elId}`).nextElementSibling;
+            const originalBtnHtml = btn.innerHTML;
+            btn.innerHTML = '<div class="loader"></div> <span>Memproses PDF...</span>';
+            
+            html2pdf().set({ 
+                margin: 0.3, 
+                filename: `${name}_${selectedPeriod}.pdf`, 
+                html2canvas: { scale: 2, useCORS: true }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+            })
+            .from(document.getElementById(elId)).save().then(() => {
+                showToast("PDF Laporan Berhasil Diunduh!");
+                btn.innerHTML = originalBtnHtml;
+            });
         };
     </script>
 </body>
