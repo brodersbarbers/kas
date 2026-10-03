@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BroDers Keuangan Barbershop</title>
+    <title>Bro'derS Keuangan Barbershop</title>
+    
+    <!-- PWA Manifest & App Icons -->
     <meta name="theme-color" content="#9B1C31">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3262/3262975.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3262/3262975.png">
+    <!-- Embedded Manifest Base64 -->
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQnJvRGVycyBCYXJiZXJzaG9wIiwic2hvcnRfbmFtZSI6IkJyb0RlcnMiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBmMTcyYSIsInRoZW1lX2NvbG9yIjoiIzlCMUMzMSIsImljb25zIjpbeyJzcmMiOiJodHRwczovL2Nkbi1pY29ucy1wbmcuZmxhdGljb24uY29tLzUxMi8zMjYyLzMyNjI5NzUucG5nIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -66,12 +74,15 @@
             margin: 0;
             display: flex;
             justify-content: center;
+            height: 100vh;
+            height: 100dvh; 
         }
 
         #app {
             width: 100%;
             max-width: 420px;
             height: 100vh;
+            height: 100dvh;
             background: #f8fafc;
             background-image: 
                 radial-gradient(at 0% 0%, hsla(353,49%,43%,0.15) 0px, transparent 50%),
@@ -184,8 +195,8 @@
                     <div class="w-20 h-20 shine-maroon rounded-[1.5rem] flex items-center justify-center mx-auto mb-5 shadow-lg shadow-barber-maroon/30 transform rotate-3">
                         <i class="ph-fill ph-scissors text-4xl text-white -rotate-3"></i>
                     </div>
-                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit">Bro<span class="text-barber-maroon">Ders</span></h2>
-                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Management System</p>
+                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit">Bro'<span class="text-barber-maroon">derS</span></h2>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Financial System</p>
                 </div>
                 
                 <div class="space-y-5">
@@ -210,20 +221,25 @@
             <header class="px-6 pt-12 pb-5 bg-white/70 backdrop-blur-xl border-b border-white rounded-b-[2.5rem] shadow-sm z-10 relative flex justify-between items-center">
                 <div class="animate-slide-up">
                     <h1 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" id="header-subtitle">Overview</h1>
-                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit" id="header-title">Bro<span class="text-barber-maroon">Ders</span></h2>
+                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight font-outfit" id="header-title">Bro'<span class="text-barber-maroon">derS</span></h2>
                 </div>
-                <div class="flex items-center gap-3 animate-fade-in">
-                    <div class="text-right">
+                <div class="flex items-center gap-2 animate-fade-in">
+                    <div class="text-right hidden sm:block mr-1">
                         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Role</p>
                         <p class="text-xs font-bold text-barber-maroon capitalize" id="user-role-display">Owner</p>
                     </div>
-                    <div class="w-12 h-12 rounded-full shine-maroon flex items-center justify-center text-xl shadow-[0_5px_15px_rgba(155,28,49,0.4)] ring-4 ring-white cursor-pointer" onclick="handleLogout()">
+                    <!-- Tombol Refresh Modern -->
+                    <button onclick="refreshData()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-700 shadow-md border border-gray-100 hover:bg-gray-50 active:scale-95 transition-all">
+                        <i id="icon-refresh" class="ph-bold ph-arrows-clockwise text-xl"></i>
+                    </button>
+                    <!-- Tombol Logout -->
+                    <button class="w-10 h-10 rounded-full shine-maroon flex items-center justify-center text-lg shadow-[0_5px_15px_rgba(155,28,49,0.4)] ring-2 ring-white cursor-pointer active:scale-95 transition-all" onclick="handleLogout()">
                         <i class="ph-bold ph-sign-out"></i>
-                    </div>
+                    </button>
                 </div>
             </header>
 
-            <main class="flex-1 overflow-y-auto no-scrollbar pb-32 relative" id="main-content">
+            <main class="flex-1 overflow-y-auto no-scrollbar pb-40 relative" id="main-content">
                 
                 <!-- VIEW: DASHBOARD (Owner Only) -->
                 <div id="view-dashboard" class="view-section px-6 py-5 space-y-6">
@@ -260,16 +276,22 @@
                             </div>
                         </div>
 
-                        <!-- Simple Chart -->
-                        <div class="glass-card rounded-[2rem] p-6 animate-slide-up mt-6">
+                        <!-- Modern Chart -->
+                        <div class="glass-card rounded-[2rem] p-6 animate-slide-up mt-6 shadow-sm border border-gray-100">
                             <div class="flex justify-between items-center mb-5">
-                                <h4 class="font-bold text-gray-800 text-sm">Grafik Arus Kas</h4>
-                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="ph-bold ph-trend-up"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">Analitik Arus Kas</h4>
+                                    <p class="text-[10px] text-gray-500 font-medium mt-0.5">Statistik harian bulan ini</p>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-barber-maroon/10 flex items-center justify-center text-barber-maroon"><i class="ph-fill ph-chart-line-up"></i></div>
                             </div>
-                            <div class="relative h-44 w-full">
+                            <div class="relative h-48 w-full">
                                 <canvas id="financeChart"></canvas>
                             </div>
                         </div>
+
+                        <!-- Insight Container (Analisa Baru) -->
+                        <div id="insight-container" class="animate-slide-up mt-6"></div>
 
                         <!-- Recent Transactions -->
                         <div class="animate-slide-up mt-8 mb-6">
@@ -299,7 +321,7 @@
                     </div>
 
                     <div class="glass-card rounded-[2rem] p-7 mb-6">
-                        <p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mb-2" id="input-amount-label">Jumlah Pemasukan</p>
+                        <p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 transition-all duration-300" id="input-amount-label">Jumlah Pemasukan</p>
                         <div class="flex items-center justify-center gap-2 mb-8 border-b-2 border-gray-100 pb-4 transition-colors focus-within:border-barber-maroon/50">
                             <span class="text-2xl font-bold text-gray-400 font-outfit">Rp</span>
                             <input type="text" id="input-amount" class="modern-input" placeholder="0" oninput="formatRupiahInput(this)">
@@ -309,21 +331,54 @@
                         
                         <!-- Kategori Pemasukan -->
                         <div class="grid grid-cols-3 gap-3 mb-8" id="grid-inc-cat">
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Cukur Rambut" class="category-radio hidden" checked><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-scissors text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Cukur</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Cuci & Styling" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-drop text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Cuci/Style</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Pewarnaan" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-paint-brush text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Warna</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Produk" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-package text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Produk</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Lain-lain" class="category-radio hidden"><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-plus-circle text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Lainnya</span></label></div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="inc-1" value="Cukur Rambut" class="category-radio hidden" checked>
+                                <label for="inc-1" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-scissors text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Cukur</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="inc-2" value="Cuci & Styling" class="category-radio hidden">
+                                <label for="inc-2" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-drop text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Cuci/Style</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="inc-3" value="Pewarnaan" class="category-radio hidden">
+                                <label for="inc-3" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-paint-brush text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Warna</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="inc-4" value="Produk" class="category-radio hidden">
+                                <label for="inc-4" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-package text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Produk</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="inc-5" value="Lain-lain" class="category-radio hidden">
+                                <label for="inc-5" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-plus-circle text-2xl mb-2 text-barber-maroon"></i><span class="text-[10px] font-bold text-center leading-tight">Lainnya</span></label>
+                            </div>
                         </div>
 
                         <!-- Kategori Pengeluaran -->
                         <div class="grid grid-cols-3 gap-3 mb-8 hidden" id="grid-exp-cat">
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Makan" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-fork-knife text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Makan</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Air & Listrik" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-lightning text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Air & Listrik</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Sewa Tempat" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-storefront text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Sewa Tempat</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Gaji Pegawai" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-users text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Gaji Pegawai</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Alat & Bahan" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-spray-bottle text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Alat/Bahan</span></label></div>
-                            <div class="cat-wrap"><input type="radio" name="input-category" value="Lain-lain" class="category-radio-exp hidden" disabled><label class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-dots-three-circle text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Lainnya</span></label></div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="exp-1" value="Makan" class="category-radio-exp hidden" disabled>
+                                <label for="exp-1" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-fork-knife text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Makan</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="exp-2" value="Air & Listrik" class="category-radio-exp hidden" disabled>
+                                <label for="exp-2" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-lightning text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Air & Listrik</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="exp-3" value="Sewa Tempat" class="category-radio-exp hidden" disabled>
+                                <label for="exp-3" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-storefront text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Sewa Tempat</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="exp-4" value="Gaji Pegawai" class="category-radio-exp hidden" disabled>
+                                <label for="exp-4" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-users text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Gaji Pegawai</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="exp-5" value="Alat & Bahan" class="category-radio-exp hidden" disabled>
+                                <label for="exp-5" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-spray-bottle text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Alat/Bahan</span></label>
+                            </div>
+                            <div class="cat-wrap">
+                                <input type="radio" name="input-category" id="exp-6" value="Lain-lain" class="category-radio-exp hidden" disabled>
+                                <label for="exp-6" class="flex flex-col items-center justify-center p-3.5 rounded-2xl border border-white bg-white/50 text-gray-600 h-full cursor-pointer transition-all duration-200"><i class="ph ph-dots-three-circle text-2xl mb-2 text-gray-700"></i><span class="text-[10px] font-bold text-center leading-tight">Lainnya</span></label>
+                            </div>
                         </div>
 
                         <p class="text-gray-800 text-sm font-bold mb-3 flex items-center gap-2"><i class="ph-fill ph-note-pencil text-barber-maroon"></i> Catatan</p>
@@ -372,7 +427,7 @@
                     <div id="preview-gaji" class="hidden mb-6 animate-fade-in">
                         <div id="document-slip" class="bg-white rounded-t-3xl rounded-b-lg shadow-xl overflow-hidden relative border border-gray-100">
                             <div class="bg-barber-dark text-center py-5 text-white relative">
-                                <h2 class="font-black text-2xl font-outfit">BroDers</h2><p class="text-[10px] uppercase mt-1">Premium Barbershop</p>
+                                <h2 class="font-black text-2xl font-outfit">Bro'derS</h2><p class="text-[10px] uppercase mt-1">Premium Barbershop</p>
                             </div>
                             <div class="p-6">
                                 <div class="text-center mb-6 border-b border-gray-100 pb-4">
@@ -386,7 +441,7 @@
                                     <div class="flex justify-between text-sm mb-3 pb-3 border-b border-gray-200 border-dashed"><span class="text-gray-600">Potongan</span><span class="font-bold text-red-500 font-outfit" id="prev-gaji-potongan">Rp 0</span></div>
                                     <div class="flex justify-between mt-4 items-center"><span class="font-bold text-gray-800">Total Diterima</span><span class="font-black text-xl text-barber-maroon font-outfit" id="prev-gaji-total">Rp 0</span></div>
                                 </div>
-                                <div class="flex justify-between mt-8 text-center text-xs"><div class="w-1/2"><p class="text-gray-400 mb-10">Penerima,</p><p class="font-bold text-gray-800 border-b inline-block px-4 pb-1" id="prev-gaji-ttd">-</p></div><div class="w-1/2"><p class="text-gray-400 mb-10">Manajemen,</p><p class="font-bold text-gray-800 border-b inline-block px-4 pb-1">BroDers</p></div></div>
+                                <div class="flex justify-between mt-8 text-center text-xs"><div class="w-1/2"><p class="text-gray-400 mb-10">Penerima,</p><p class="font-bold text-gray-800 border-b inline-block px-4 pb-1" id="prev-gaji-ttd">-</p></div><div class="w-1/2"><p class="text-gray-400 mb-10">Manajemen,</p><p class="font-bold text-gray-800 border-b inline-block px-4 pb-1">Bro'derS</p></div></div>
                             </div>
                             <div class="receipt-edge"></div>
                         </div>
@@ -420,22 +475,13 @@
                             <div class="col-span-2 bg-gray-900 rounded-2xl p-5 text-center"><p class="text-[11px] text-gray-300 mb-1 uppercase">Net Profit (Bersih)</p><p class="font-black text-white text-3xl font-outfit" id="lap-net-profit">Rp 0</p></div>
                         </div>
 
-                        <!-- SECTION: REKAP PER KARYAWAN / USER -->
-                        <div class="bg-blue-50/50 rounded-2xl p-4 mb-5 border border-blue-100">
-                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800">
-                                <i class="ph-fill ph-users text-blue-600 text-lg"></i> Kinerja per Karyawan/User
-                            </h4>
-                            <div id="lap-list-staff" class="space-y-3">
-                                <!-- Data staff akan di-render disini -->
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-50 rounded-2xl p-4 mb-4 border">
-                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800"><i class="ph-fill ph-trend-up text-green-500 text-lg"></i> Rincian Pemasukan</h4>
+                        <!-- SECTION: RINCIAN PER USER -->
+                        <div class="bg-gray-50 rounded-2xl p-4 mb-4 border border-gray-100">
+                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800"><i class="ph-fill ph-trend-up text-green-500 text-lg"></i> Detail Pemasukan per User</h4>
                             <div id="lap-list-inc" class="space-y-3"></div>
                         </div>
-                        <div class="bg-gray-50 rounded-2xl p-4 mb-2 border">
-                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800"><i class="ph-fill ph-trend-down text-red-500 text-lg"></i> Rincian Pengeluaran</h4>
+                        <div class="bg-gray-50 rounded-2xl p-4 mb-2 border border-gray-100">
+                            <h4 class="font-bold text-sm mb-4 flex items-center gap-2 text-gray-800"><i class="ph-fill ph-trend-down text-red-500 text-lg"></i> Detail Pengeluaran per User</h4>
                             <div id="lap-list-exp" class="space-y-3"></div>
                         </div>
                     </div>
@@ -480,7 +526,7 @@
         // ==========================================
         // GANTI URL INI DENGAN URL WEB APP GOOGLE SCRIPT ANDA
         // ==========================================
-        const API_URL = "https://script.google.com/macros/s/AKfycbzOC1NsKL7NTU0hGVd0Jy53zkEe1k0j4aWbaTdfIfbyBbDVXbXBvb0xuvWY9Yjcye_v/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbyHRO2hss7aO9Q7yr7nIWpCz8GqI2uO2PD0AVPlac_FAysnefrwI-V1AGMynN0s6X-R/exec";
         let currentUser = null;
         let transactions = [];
         let financeChartInstance = null;
@@ -580,7 +626,6 @@
             
             document.getElementById('user-role-display').innerText = currentUser.role;
 
-            // Role Based Access
             if (currentUser.role === 'karyawan') {
                 document.getElementById('nav-dashboard').style.display = 'none';
                 document.getElementById('nav-laporan').style.display = 'none';
@@ -592,6 +637,21 @@
             }
         }
 
+        // --- REFRESH DATA LOGIC ---
+        async function refreshData() {
+            const icon = document.getElementById('icon-refresh');
+            icon.classList.add('animate-spin');
+            
+            await loadDashboardData();
+            
+            if (!document.getElementById('view-laporan').classList.contains('hidden')) {
+                generateLaporan();
+            }
+
+            icon.classList.remove('animate-spin');
+            showToast("Data Tersinkronisasi!");
+        }
+
         // --- NAVIGATION ---
         const switchTab = (tabId) => {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
@@ -599,7 +659,7 @@
             if(targetView) targetView.classList.remove('hidden');
 
             const titles = {
-                'dashboard': { sub: 'Overview', main: 'Bro<span class="text-barber-maroon">Ders</span>' },
+                'dashboard': { sub: 'Overview', main: 'Bro'<span class="text-barber-maroon">derS</span>' },
                 'input': { sub: 'Pencatatan', main: 'Transaksi' },
                 'gaji': { sub: 'Dokumen', main: 'Slip Gaji' },
                 'laporan': { sub: 'Analitik', main: 'Laporan' }
@@ -662,8 +722,71 @@
             document.getElementById('dash-expense').innerText = formatRupiah(totalExp);
 
             renderTransactionList();
-            renderSimpleChart();
+            renderModernChart();
+            generateDashboardInsights(); // Memanggil Analisa Baru
         }
+
+        // --- DASHBOARD INSIGHTS LOGIC (NEW) ---
+        const generateDashboardInsights = () => {
+            if (!transactions || transactions.length === 0) {
+                document.getElementById('insight-container').innerHTML = '';
+                return;
+            }
+
+            let incCats = {};
+            let expCats = {};
+            let totalInc = 0;
+            let totalExp = 0;
+
+            transactions.forEach(t => {
+                const amt = parseInt(t.amount) || 0;
+                if (t.type === 'income') {
+                    totalInc += amt;
+                    incCats[t.category] = (incCats[t.category] || 0) + amt;
+                } else {
+                    totalExp += amt;
+                    expCats[t.category] = (expCats[t.category] || 0) + amt;
+                }
+            });
+
+            // Menghitung Top Kategori
+            let topIncCat = Object.keys(incCats).length > 0 ? Object.keys(incCats).reduce((a, b) => incCats[a] > incCats[b] ? a : b) : '-';
+            let topExpCat = Object.keys(expCats).length > 0 ? Object.keys(expCats).reduce((a, b) => expCats[a] > expCats[b] ? a : b) : '-';
+
+            // Menghitung rata-rata harian (berdasarkan jumlah hari di bulan terpilih)
+            const [year, month] = selectedPeriod.split('-');
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const avgDailyInc = totalInc / daysInMonth;
+            
+            const profitStatus = (totalInc - totalExp) >= 0 ? 'Surplus (Untung)' : 'Defisit (Rugi)';
+            const profitColor = (totalInc - totalExp) >= 0 ? 'text-green-600' : 'text-red-500';
+
+            let insightHtml = `
+                <div class="glass-card rounded-[1.5rem] p-5 shadow-sm border border-barber-maroon/20 bg-gradient-to-br from-barber-maroon/5 to-transparent relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 opacity-10"><i class="ph-fill ph-lightbulb text-7xl text-barber-maroon"></i></div>
+                    <div class="flex items-center gap-2 mb-4 relative z-10">
+                        <div class="w-7 h-7 rounded-full shine-maroon flex items-center justify-center text-white"><i class="ph-fill ph-sparkle text-sm"></i></div>
+                        <h4 class="font-extrabold text-gray-800 text-[13px] uppercase tracking-wider">Analisa Bulan Ini</h4>
+                    </div>
+                    <ul class="space-y-3 relative z-10 text-xs text-gray-700 font-medium">
+                        <li class="flex gap-3 items-start bg-white/60 p-2.5 rounded-xl border border-white shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center shrink-0 mt-0.5"><i class="ph-bold ph-trend-up text-green-600"></i></div>
+                            <span class="leading-relaxed">Layanan terlaris adalah <b class="text-gray-900">${topIncCat}</b> dengan total pendapatan <b class="text-green-600">${formatRupiah(incCats[topIncCat]||0)}</b>.</span>
+                        </li>
+                        <li class="flex gap-3 items-start bg-white/60 p-2.5 rounded-xl border border-white shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                            <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center shrink-0 mt-0.5"><i class="ph-bold ph-trend-down text-red-500"></i></div>
+                            <span class="leading-relaxed">Pengeluaran terbesar dialokasikan untuk <b class="text-gray-900">${topExpCat}</b> (Sejumlah <b class="text-red-500">${formatRupiah(expCats[topExpCat]||0)}</b>).</span>
+                        </li>
+                        <li class="flex gap-3 items-start bg-white/60 p-2.5 rounded-xl border border-white shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-0.5"><i class="ph-bold ph-coins text-blue-500"></i></div>
+                            <span class="leading-relaxed">Performa kas saat ini <b class="${profitColor}">${profitStatus}</b>. Rata-rata pemasukan harian <b class="text-blue-600">${formatRupiah(avgDailyInc)}</b>/hari.</span>
+                        </li>
+                    </ul>
+                </div>
+            `;
+            document.getElementById('insight-container').innerHTML = insightHtml;
+        };
+
 
         // --- INPUT LOGIC ---
         const toggleInputType = (type) => {
@@ -673,28 +796,31 @@
             const gridInc = document.getElementById('grid-inc-cat');
             const gridExp = document.getElementById('grid-exp-cat');
             const btnSave = document.getElementById('btn-save');
+            const labelAmount = document.getElementById('input-amount-label');
 
             if(type === 'income') {
-                btnInc.className = "flex-1 py-3 text-sm font-bold rounded-xl bg-white text-barber-maroon shadow-md";
-                btnExp.className = "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800";
+                labelAmount.innerText = 'Jumlah Pemasukan'; 
+                btnInc.className = "flex-1 py-3 text-sm font-bold rounded-xl bg-white text-barber-maroon shadow-md transition-all duration-300";
+                btnExp.className = "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800 transition-all duration-300";
                 gridInc.classList.remove('hidden'); gridExp.classList.add('hidden');
                 
                 gridInc.querySelectorAll('input').forEach(i => i.disabled = false);
                 gridExp.querySelectorAll('input').forEach(i => i.disabled = true);
                 if(!gridInc.querySelector('input:checked')) gridInc.querySelector('input').checked = true;
 
-                btnSave.className = "w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl";
+                btnSave.className = "w-full shine-maroon py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl shadow-barber-maroon/30 transition-transform active:scale-95";
                 btnSave.innerHTML = '<i class="ph-bold ph-check-circle text-2xl"></i> <span>Simpan Pemasukan</span>';
             } else {
-                btnExp.className = "flex-1 py-3 text-sm font-bold rounded-xl bg-gray-800 text-white shadow-md";
-                btnInc.className = "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800";
+                labelAmount.innerText = 'Jumlah Pengeluaran'; 
+                btnExp.className = "flex-1 py-3 text-sm font-bold rounded-xl bg-gray-800 text-white shadow-md transition-all duration-300";
+                btnInc.className = "flex-1 py-3 text-sm font-bold rounded-xl text-gray-500 hover:text-gray-800 transition-all duration-300";
                 gridExp.classList.remove('hidden'); gridInc.classList.add('hidden');
                 
                 gridExp.querySelectorAll('input').forEach(i => i.disabled = false);
                 gridInc.querySelectorAll('input').forEach(i => i.disabled = true);
                 if(!gridExp.querySelector('input:checked')) gridExp.querySelector('input').checked = true;
 
-                btnSave.className = "w-full bg-gray-800 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl";
+                btnSave.className = "w-full bg-gray-800 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl shadow-gray-800/30 transition-transform active:scale-95";
                 btnSave.innerHTML = '<i class="ph-bold ph-minus-circle text-2xl"></i> <span>Catat Pengeluaran</span>';
             }
         };
@@ -711,6 +837,7 @@
             btnSave.innerHTML = '<div class="loader"></div> <span>Menyimpan...</span>';
             btnSave.disabled = true;
 
+            // MENAMBAHKAN EXTRA FALLBACK AGAR GSCRIPT MENANGKAP NAMA USER SECARA ABSOLUT (MESKIPUN OWNER)
             const payload = {
                 action: 'addTransaction',
                 id: Date.now().toString(),
@@ -719,7 +846,10 @@
                 category: categoryEl.value,
                 note: note,
                 date: new Date().toISOString(),
-                inputBy: currentUser.username
+                inputBy: currentUser.username, 
+                username: currentUser.username, 
+                user: currentUser.username,
+                nama: currentUser.username
             };
 
             const res = await fetchAPI(payload);
@@ -771,7 +901,6 @@
             document.getElementById('form-gaji').classList.remove('hidden');
         };
 
-        // Helper untuk mendapatkan ikon berdasarkan kategori
         const getCategoryIcon = (category) => {
             const lowerCat = category.toLowerCase();
             if (lowerCat.includes('cukur')) return 'ph-scissors';
@@ -791,7 +920,6 @@
             listEl.innerHTML = '';
             document.getElementById('tx-count').innerText = `${transactions.length} Trx`;
             
-            // Empty State
             if (transactions.length === 0) { 
                 listEl.innerHTML = `
                     <div class="bg-white border border-dashed border-gray-300 rounded-[2rem] p-8 text-center flex flex-col items-center justify-center shadow-sm">
@@ -804,28 +932,22 @@
                 return; 
             }
             
-            // Sort by newest
             transactions.sort((a, b) => new Date(b.date) - new Date(a.date)); 
             
-            // Render limit to 6 items on dashboard
             transactions.slice(0, 6).forEach(t => {
                 const isInc = t.type === 'income';
                 const d = new Date(t.date);
-                
-                // Format Waktu & Tanggal
                 const options = { weekday: 'short', day: 'numeric', month: 'short' };
                 const dateStr = d.toLocaleDateString('id-ID', options);
                 const timeStr = `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
                 
-                // Tema modern per tipe
                 const catIcon = getCategoryIcon(t.category);
                 const bgIcon = isInc ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-500 border-red-100';
                 const amountColor = isInc ? 'text-green-600' : 'text-gray-800';
                 const sign = isInc ? '+' : '-';
                 
-                // Avatar dan User
-                const inputter = t.inputBy || 'Sistem';
-                const initial = inputter.charAt(0).toUpperCase();
+                // MENGGUNAKAN FALLBACK BERLAPIS UNTUK MENANGKAP NAMA USER
+                const inputter = t.username || t.inputBy || t.user || t.nama || 'Sistem';
 
                 listEl.innerHTML += `
                     <div class="bg-white border border-gray-100 hover:border-barber-maroon/30 hover:shadow-md transition-all duration-300 flex items-center justify-between p-4 rounded-2xl relative overflow-hidden group cursor-pointer">
@@ -838,13 +960,12 @@
                             
                             <div class="flex-1 min-w-0 pr-2">
                                 <p class="text-sm font-extrabold text-gray-800 capitalize leading-tight mb-1 truncate">${t.category}</p>
-                                <div class="flex items-center gap-2 flex-wrap">
+                                <div class="flex items-center gap-2 flex-wrap mb-1">
                                     <span class="text-[10px] font-semibold text-gray-400 whitespace-nowrap">${dateStr}, ${timeStr}</span>
-                                    <div class="w-1 h-1 rounded-full bg-gray-300"></div>
-                                    <div class="flex items-center gap-1.5 bg-gray-50 px-1.5 py-0.5 rounded-md border border-gray-100">
-                                        <div class="w-3.5 h-3.5 rounded-full bg-gray-200 flex items-center justify-center text-[7px] font-black text-gray-600">${initial}</div>
-                                        <span class="text-[9px] font-bold text-gray-500 capitalize">${inputter}</span>
-                                    </div>
+                                </div>
+                                <div class="inline-flex items-center gap-1 bg-blue-50/50 px-2 py-1 rounded-lg border border-blue-100 mt-1">
+                                    <i class="ph-fill ph-user-circle text-blue-500 text-[11px]"></i>
+                                    <span class="text-[9px] font-bold text-gray-600">Diinput oleh: <span class="text-blue-600 capitalize">${inputter}</span></span>
                                 </div>
                                 ${t.note ? `<p class="text-[10px] text-gray-500 mt-1.5 truncate border-l-2 border-gray-200 pl-2">"${t.note}"</p>` : ''}
                             </div>
@@ -857,55 +978,134 @@
             });
         };
 
-        const renderSimpleChart = () => {
+        const renderModernChart = () => {
             const ctx = document.getElementById('financeChart').getContext('2d');
             const days = new Date(parseInt(selectedPeriod.split('-')[0]), parseInt(selectedPeriod.split('-')[1]), 0).getDate();
+            
             const labels = Array.from({length: days}, (_, i) => i + 1);
-            const netData = new Array(days).fill(0);
+            const incomeData = new Array(days).fill(0);
+            const expenseData = new Array(days).fill(0);
 
             transactions.forEach(t => {
                 const dayIdx = new Date(t.date).getDate() - 1;
-                netData[dayIdx] += (t.type === 'income' ? parseInt(t.amount) : -parseInt(t.amount));
+                if (dayIdx >= 0 && dayIdx < days) {
+                    if(t.type === 'income') {
+                        incomeData[dayIdx] += parseInt(t.amount) || 0;
+                    } else {
+                        expenseData[dayIdx] += parseInt(t.amount) || 0;
+                    }
+                }
             });
 
-            let cumulative = 0; const trendData = netData.map(val => { cumulative += val; return cumulative; });
             if (financeChartInstance) financeChartInstance.destroy();
-            let grad = ctx.createLinearGradient(0, 0, 0, 180);
-            grad.addColorStop(0, "rgba(155, 28, 49, 0.4)"); grad.addColorStop(1, "rgba(155, 28, 49, 0)");
+            
+            let gradInc = ctx.createLinearGradient(0, 0, 0, 200);
+            gradInc.addColorStop(0, "rgba(34, 197, 94, 0.4)"); 
+            gradInc.addColorStop(1, "rgba(34, 197, 94, 0)");
+            
+            let gradExp = ctx.createLinearGradient(0, 0, 0, 200);
+            gradExp.addColorStop(0, "rgba(239, 68, 68, 0.4)"); 
+            gradExp.addColorStop(1, "rgba(239, 68, 68, 0)");
             
             financeChartInstance = new Chart(ctx, {
-                type: 'line', data: { labels: labels, datasets: [{ data: trendData, borderColor: '#9B1C31', backgroundColor: grad, borderWidth: 3, fill: true, tension: 0.4 }] },
-                options: { plugins: {legend: {display: false}}, scales: { x: {display: false}, y: {display: false} } }
+                type: 'line', 
+                data: { 
+                    labels: labels, 
+                    datasets: [
+                        { 
+                            label: 'Pemasukan',
+                            data: incomeData, 
+                            borderColor: '#22c55e', 
+                            backgroundColor: gradInc, 
+                            borderWidth: 2.5, 
+                            fill: true, 
+                            tension: 0.4,
+                            pointRadius: 1,
+                            pointHoverRadius: 6
+                        },
+                        { 
+                            label: 'Pengeluaran',
+                            data: expenseData, 
+                            borderColor: '#ef4444', 
+                            backgroundColor: gradExp, 
+                            borderWidth: 2.5, 
+                            fill: true, 
+                            tension: 0.4,
+                            pointRadius: 1,
+                            pointHoverRadius: 6
+                        }
+                    ] 
+                },
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            align: 'end',
+                            labels: { boxWidth: 10, usePointStyle: true, font: { family: 'Poppins', size: 10, weight: 'bold' } }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleFont: { family: 'Outfit', size: 13 },
+                            bodyFont: { family: 'Outfit', size: 12 },
+                            padding: 10,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatRupiah(context.parsed.y);
+                                }
+                            }
+                        }
+                    }, 
+                    scales: { 
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxTicksLimit: 7, font: { family: 'Outfit', size: 10 }, color: '#94a3b8' }
+                        }, 
+                        y: {
+                            display: false,
+                            beginAtZero: true
+                        } 
+                    },
+                    interaction: { mode: 'index', intersect: false }
+                }
             });
         };
 
-        // FUNGSI UTAMA BARU: Laporan Kinerja
         const generateLaporan = () => {
             let totalInc = 0, totalExp = 0;
-            const catInc = {}, catExp = {};
-            const staffStats = {}; // Objek untuk menyimpan rekap per user
+            const incByUser = {}; 
+            const expByUser = {};
 
             transactions.forEach(t => {
-                const amt = parseInt(t.amount);
-                const user = t.inputBy || 'Sistem';
-
-                // Inisialisasi statistik staff jika belum ada
-                if (!staffStats[user]) {
-                    staffStats[user] = { inc: 0, exp: 0 };
-                }
+                const amt = parseInt(t.amount) || 0;
+                // Konsisten menggunakan fallback username yang kuat
+                const user = t.username || t.inputBy || t.user || t.nama || 'Sistem';
+                
+                const tDate = new Date(t.date);
+                const options = { day: 'numeric', month: 'short' };
+                const dateStr = tDate.toLocaleDateString('id-ID', options);
+                const timeStr = `${tDate.getHours().toString().padStart(2,'0')}:${tDate.getMinutes().toString().padStart(2,'0')}`;
+                
+                const txDetail = { category: t.category, amount: amt, date: `${dateStr}, ${timeStr}`, note: t.note };
 
                 if(t.type === 'income') { 
                     totalInc += amt; 
-                    catInc[t.category] = (catInc[t.category] || 0) + amt; 
-                    staffStats[user].inc += amt; // Tambah ke statistik user
+                    if(!incByUser[user]) incByUser[user] = { total: 0, items: [] };
+                    incByUser[user].total += amt; 
+                    incByUser[user].items.push(txDetail);
                 } else { 
                     totalExp += amt; 
-                    catExp[t.category] = (catExp[t.category] || 0) + amt; 
-                    staffStats[user].exp += amt; // Tambah ke statistik user
+                    if(!expByUser[user]) expByUser[user] = { total: 0, items: [] };
+                    expByUser[user].total += amt; 
+                    expByUser[user].items.push(txDetail);
                 }
             });
 
-            // Update UI Total Keseluruhan
             document.getElementById('lap-total-inc').innerText = formatRupiah(totalInc);
             document.getElementById('lap-total-exp').innerText = formatRupiah(totalExp);
             document.getElementById('lap-net-profit').innerText = formatRupiah(totalInc - totalExp);
@@ -913,80 +1113,74 @@
             document.getElementById('lap-month-display').innerText = getMonthName(selectedPeriod);
             document.getElementById('lap-doc-periode').innerText = `Periode: ${getMonthName(selectedPeriod)}`;
 
-            // Render Progress Bar Kategori Pemasukan
+            // Render Pemasukan (Grouped by User beserta riwayat rinci)
             let incHtml = '';
-            for(const [cat, val] of Object.entries(catInc).sort((a,b) => b[1]-a[1])) {
-                const pct = totalInc > 0 ? (val / totalInc) * 100 : 0;
+            for(const [user, data] of Object.entries(incByUser).sort((a,b) => b[1].total - a[1].total)) {
+                let itemsHtml = data.items.map(i => `
+                    <div class="flex justify-between items-center text-[10px] border-b border-gray-100 py-2.5 last:border-0 hover:bg-gray-50 transition-colors px-1">
+                        <div class="flex-1 truncate pr-2">
+                            <span class="font-bold text-gray-700 block text-[11px] mb-0.5">${i.category}</span>
+                            <span class="text-[9px] text-gray-400 leading-tight block">${i.date}</span>
+                            ${i.note ? `<span class="text-[9px] text-gray-500 italic mt-0.5 inline-block">Catatan: "${i.note}"</span>` : ''}
+                        </div>
+                        <span class="font-bold font-outfit text-green-600 shrink-0">+${formatRupiah(i.amount)}</span>
+                    </div>
+                `).join('');
+
                 incHtml += `
-                    <div class="mb-3">
-                        <div class="flex justify-between text-[11px] mb-1.5"><span class="text-gray-600 font-medium">${cat}</span><span class="font-bold font-outfit text-gray-800">${formatRupiah(val)}</span></div>
-                        <div class="w-full bg-gray-200/80 rounded-full h-2 overflow-hidden"><div class="bg-gradient-to-r from-green-400 to-green-500 h-2 rounded-full transition-all duration-1000" style="width: ${pct}%"></div></div>
+                    <div class="bg-white border border-green-100 rounded-xl mb-3 shadow-sm overflow-hidden">
+                        <div class="bg-green-50/70 flex justify-between items-center px-4 py-3 border-b border-green-100">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-user-circle text-green-600 text-lg"></i>
+                                <div>
+                                    <span class="text-[9px] text-gray-500 block uppercase tracking-wider font-bold mb-0.5">Transaksi Dari</span>
+                                    <span class="font-black text-xs text-gray-800 capitalize leading-none">${user}</span>
+                                </div>
+                            </div>
+                            <span class="font-black font-outfit text-sm text-green-700">${formatRupiah(data.total)}</span>
+                        </div>
+                        <div class="px-3 py-1 bg-white">
+                            ${itemsHtml}
+                        </div>
                     </div>`;
             }
             document.getElementById('lap-list-inc').innerHTML = incHtml || '<p class="text-[11px] text-gray-400 italic text-center py-2">Belum ada data pemasukan</p>';
 
-            // Render Progress Bar Kategori Pengeluaran
+            // Render Pengeluaran (Grouped by User beserta riwayat rinci)
             let expHtml = '';
-            for(const [cat, val] of Object.entries(catExp).sort((a,b) => b[1]-a[1])) {
-                const pct = totalExp > 0 ? (val / totalExp) * 100 : 0;
+            for(const [user, data] of Object.entries(expByUser).sort((a,b) => b[1].total - a[1].total)) {
+                let itemsHtml = data.items.map(i => `
+                    <div class="flex justify-between items-center text-[10px] border-b border-gray-100 py-2.5 last:border-0 hover:bg-gray-50 transition-colors px-1">
+                        <div class="flex-1 truncate pr-2">
+                            <span class="font-bold text-gray-700 block text-[11px] mb-0.5">${i.category}</span>
+                            <span class="text-[9px] text-gray-400 leading-tight block">${i.date}</span>
+                            ${i.note ? `<span class="text-[9px] text-gray-500 italic mt-0.5 inline-block">Catatan: "${i.note}"</span>` : ''}
+                        </div>
+                        <span class="font-bold font-outfit text-red-500 shrink-0">-${formatRupiah(i.amount)}</span>
+                    </div>
+                `).join('');
+
                 expHtml += `
-                    <div class="mb-3">
-                        <div class="flex justify-between text-[11px] mb-1.5"><span class="text-gray-600 font-medium">${cat}</span><span class="font-bold font-outfit text-gray-800">${formatRupiah(val)}</span></div>
-                        <div class="w-full bg-gray-200/80 rounded-full h-2 overflow-hidden"><div class="bg-gradient-to-r from-red-400 to-red-500 h-2 rounded-full transition-all duration-1000" style="width: ${pct}%"></div></div>
+                    <div class="bg-white border border-red-100 rounded-xl mb-3 shadow-sm overflow-hidden">
+                        <div class="bg-red-50/70 flex justify-between items-center px-4 py-3 border-b border-red-100">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-user-circle text-red-500 text-lg"></i>
+                                <div>
+                                    <span class="text-[9px] text-gray-500 block uppercase tracking-wider font-bold mb-0.5">Transaksi Dari</span>
+                                    <span class="font-black text-xs text-gray-800 capitalize leading-none">${user}</span>
+                                </div>
+                            </div>
+                            <span class="font-black font-outfit text-sm text-red-600">${formatRupiah(data.total)}</span>
+                        </div>
+                        <div class="px-3 py-1 bg-white">
+                            ${itemsHtml}
+                        </div>
                     </div>`;
             }
             document.getElementById('lap-list-exp').innerHTML = expHtml || '<p class="text-[11px] text-gray-400 italic text-center py-2">Belum ada data pengeluaran</p>';
-
-            // Render Kartu Rekap Per Karyawan (Fitur Baru)
-            let staffHtml = '';
-            for(const [user, stats] of Object.entries(staffStats)) {
-                const net = stats.inc - stats.exp;
-                const isOwner = user.toLowerCase() === 'owner' || user.toLowerCase() === 'admin' || user.toLowerCase() === 'bos';
-                
-                // Visual pembeda antara Owner dan Karyawan biasa
-                const badgeColor = isOwner ? 'bg-barber-gold/20 text-yellow-600' : 'bg-blue-100 text-blue-600';
-                const icon = isOwner ? 'ph-crown' : 'ph-user';
-                const borderColor = isOwner ? 'border-yellow-200' : 'border-blue-100';
-                
-                staffHtml += `
-                    <div class="bg-white rounded-xl p-3 border ${borderColor} shadow-sm relative overflow-hidden transition-all hover:shadow-md">
-                        <div class="absolute left-0 top-0 h-full w-1 ${isOwner ? 'bg-barber-gold' : 'bg-blue-500'}"></div>
-                        
-                        <div class="flex justify-between items-center mb-2 pb-2 border-b border-gray-50 pl-2">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-full ${badgeColor} flex items-center justify-center">
-                                    <i class="ph-fill ${icon} text-lg"></i>
-                                </div>
-                                <div>
-                                    <span class="font-extrabold text-[13px] text-gray-800 capitalize block leading-tight">${user}</span>
-                                    <span class="text-[9px] text-gray-400 font-medium">${isOwner ? 'Manajemen' : 'Karyawan / Kapster'}</span>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[9px] text-gray-400 uppercase tracking-widest block font-bold mb-0.5">Net Dihasilkan</span>
-                                <span class="text-sm font-black text-gray-800 font-outfit">${formatRupiah(net)}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between text-[10px] pl-2 mt-1">
-                            <div class="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-lg">
-                                <i class="ph-bold ph-arrow-down-left text-green-500"></i>
-                                <span class="text-gray-500 font-medium">Masuk:</span>
-                                <span class="font-bold text-green-600 font-outfit">${formatRupiah(stats.inc)}</span>
-                            </div>
-                            <div class="flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg">
-                                <i class="ph-bold ph-arrow-up-right text-red-500"></i>
-                                <span class="text-gray-500 font-medium">Keluar:</span>
-                                <span class="font-bold text-red-500 font-outfit">${formatRupiah(stats.exp)}</span>
-                            </div>
-                        </div>
-                    </div>`;
-            }
-            document.getElementById('lap-list-staff').innerHTML = staffHtml || '<p class="text-[11px] text-gray-400 italic text-center py-3">Belum ada aktivitas user di bulan ini.</p>';
         };
         
         const exportPdf = (elId, name) => {
-            // Sembunyikan elemen dekoratif sesaat agar PDF lebih bersih
             const btn = document.querySelector(`#${elId}`).nextElementSibling;
             const originalBtnHtml = btn.innerHTML;
             btn.innerHTML = '<div class="loader"></div> <span>Memproses PDF...</span>';
